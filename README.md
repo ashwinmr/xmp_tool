@@ -1,14 +1,11 @@
-# cren
-Program for renaming files
+# cpp_test
+Test cpp program
 
 # Build
 
 ```
-# Install boost
-sudo apt-get install libboost-all-dev
-
-git clone --recursive git@github.com:ashwinmr/cren.git
-cd cren
+git clone --recursive git@github.com:ashwinmr/cpp_test.git
+cd cpp_test
 mkdir build
 cd build
 cmake ..
