@@ -5,6 +5,36 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "run_windows",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/cpp_test.exe",
+            "args": [""],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask" : "",
+            "logging": {
+                "moduleLoad": false
+             },
+        },
+        {
+            "name": "run_mac",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/cpp_test",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "logging": {
+                "moduleLoad": false
+            },
+        },
+        {
             "name": "run_unix",
             "type": "cppdbg",
             "request": "launch",
@@ -23,20 +53,5 @@
                 }
             ]
         },
-        {
-            "name": "run_windows",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/cpp_test.exe",
-            "args": [""],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "preLaunchTask" : "",
-            "logging": {
-                "moduleLoad": false
-             },
-        }
     ]
 }

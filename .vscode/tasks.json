@@ -4,7 +4,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build_unix",
+            "label": "build_windows",
+            "type": "shell",
+            "command": "cd '${workspaceFolder}/build' && cmake .. && cmake --build .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "showReuseMessage": false,
+           }
+        },
+        {
+            "label": "build_mac",
             "type": "shell",
             "command": "cd '${workspaceFolder}/build' && cmake .. -DCMAKE_BUILD_TYPE=Debug && cmake --build . ",
             "group": {
@@ -18,17 +31,18 @@
             "problemMatcher": []
         },
         {
-            "label": "build_windows",
+            "label": "build_linux",
             "type": "shell",
-            "command": "cd '${workspaceFolder}/build' && cmake .. && cmake --build .",
+            "command": "cd '${workspaceFolder}/build' && cmake .. -DCMAKE_BUILD_TYPE=Debug && cmake --build . ",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "presentation": {
                 "reveal": "always",
-                "showReuseMessage": false,
-           }
-        }
+                "showReuseMessage": false
+            },
+            "problemMatcher": []
+        },
     ]
 }
