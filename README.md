@@ -5,7 +5,7 @@ Example cpp program
 
 ```
 git clone --recursive git@github.com:ashwinmr/cpp_example.git
-cd cpp_test
+cd cpp_example
 mkdir build
 cd build
 cmake ..
