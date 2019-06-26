@@ -1,5 +1,5 @@
-# cpp_test
-Test cpp program
+# cpp_example
+Example cpp program
 
 # Build
 
