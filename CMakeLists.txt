@@ -5,7 +5,7 @@ cmake_minimum_required( VERSION 3.1 )
 set (CMAKE_CXX_STANDARD 11)
 
 # project name
-project( cpp_test )
+project( cpp_example )
 
 # Find packages
 set(Boost_USE_STATIC_LIBS ON)
@@ -15,7 +15,7 @@ find_package( Boost COMPONENTS program_options )
 include_directories( ./src ${Boost_INCLUDE_DIRS} )
 
 # target
-add_executable( cpp_test ./src/main.cpp )
+add_executable( cpp_example ./src/main.cpp )
 
 # external libs
-target_link_libraries( cpp_test ${Boost_LIBRARIES} )
+target_link_libraries( cpp_example ${Boost_LIBRARIES} )
