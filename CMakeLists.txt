@@ -7,19 +7,13 @@ set (CMAKE_CXX_STANDARD 11)
 # project name
 project( cpp_example )
 
-# Find packages
-set(Boost_USE_STATIC_LIBS ON)
-find_package( Boost COMPONENTS program_options )
-
-# include
-include_directories( ./src ${Boost_INCLUDE_DIRS} )
-
-# target
-add_executable( cpp_example ./src/main.cpp )
-
-# external libs
-target_link_libraries( cpp_example ${Boost_LIBRARIES} )
+# add libraries
+add_subdirectory (src)
+add_subdirectory (test)
 
 # testing
 enable_testing()
-add_subdirectory( test )
+add_test(
+  NAME test_example
+  COMMAND test_example
+)
