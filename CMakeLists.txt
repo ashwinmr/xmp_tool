@@ -19,3 +19,7 @@ add_executable( cpp_example ./src/main.cpp )
 
 # external libs
 target_link_libraries( cpp_example ${Boost_LIBRARIES} )
+
+# testing
+enable_testing()
+add_subdirectory( test )
