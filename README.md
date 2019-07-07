@@ -15,5 +15,5 @@ make
 # Running tests
 ```
 cd build
-ctest
+ctest -V
 ```
