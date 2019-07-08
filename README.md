@@ -12,6 +12,12 @@ cmake ..
 make
 ```
 
+# Install
+```
+cd build
+sudo make install
+```
+
 # Running tests
 ```
 cd build
