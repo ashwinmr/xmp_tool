@@ -20,6 +20,9 @@ add_executable( cpp_example ./src/main.cpp )
 # use main source code as a library
 target_link_libraries( cpp_example src )
 
+# Install
+install(TARGETS cpp_example DESTINATION bin)
+
 # testing
 enable_testing()
 add_test(
