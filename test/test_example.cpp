@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 #include "example.hpp"
 
-TEST(Main, Square){
+TEST(SqrTest, HandleValues){
     EXPECT_EQ(sqr(2),4);
 }
 
-TEST(Main, EqualsOne)
-{
-    EXPECT_EQ(1, 1);
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
