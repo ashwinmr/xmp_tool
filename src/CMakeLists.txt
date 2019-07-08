@@ -8,5 +8,5 @@ include_directories( ./ ${Boost_INCLUDE_DIRS} )
 # Turn main souce code into a library
 add_library(src example.cpp )
 
-# Target libraries
+# Target all required libraries into source library
 target_link_libraries( src ${Boost_LIBRARIES} )
