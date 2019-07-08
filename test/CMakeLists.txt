@@ -8,4 +8,4 @@ include_directories( ../src ${GTEST_INCLUDE_DIRS} )
 add_executable( test_example ./test_example.cpp )
 
 # target external libs
-target_link_libraries( test_example src ${GTEST_BOTH_LIBRARIES} )
+target_link_libraries( test_example src ${GTEST_BOTH_LIBRARIES} pthread )
