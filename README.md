@@ -9,7 +9,30 @@ cd cpp_example
 mkdir build
 cd build
 cmake ..
+```
+
+## Mac/Linus
+```
 make
+```
+
+## Windows
+```
+cmake --build .
+```
+
+# Run
+
+## Mac/Linux
+```
+cd build
+./cpp_example
+```
+
+## Windows
+```
+cd Debug
+./cpp_example.exe
 ```
 
 # Install
