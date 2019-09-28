@@ -3,7 +3,7 @@
         "name": "Win32",
         "includePath": [
             "${workspaceFolder}/**",
-            "C:/local/boost_1_70_0"
+            "C:/local/boost_1_71_0"
         ],
         "defines": [
             "_DEBUG",
