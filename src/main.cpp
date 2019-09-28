@@ -1,9 +1,14 @@
 #include <iostream>
-#include "example.hpp"
+#include "xmp_tools.hpp"
 
-int main(int argc, char** argv) {
+using namespace std;
 
-  std::cout << "Square of 2 is " << sqr(2) << std::endl;
+int main(int argc, const char *argv[])
+{
+	for (auto &str : GetTags("C:/Ashwin/My_Programming/Programs/xmp/temp/1.jpg"))
+	{
+		cout << str << endl;
+	}
 
-  return 0;
+	return 0;
 }

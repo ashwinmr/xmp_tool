@@ -5,7 +5,7 @@ cmake_minimum_required( VERSION 3.1 )
 set (CMAKE_CXX_STANDARD 11)
 
 # Project name
-project( cpp_example )
+project( xmp_tools )
 
 # Add subdirectories
 add_subdirectory (src)
@@ -16,20 +16,20 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package( Boost COMPONENTS program_options filesystem )
 
 # Include all dependencies
-include_directories( ./src ${Boost_INCLUDE_DIRS} )
+include_directories( ./include ${Boost_INCLUDE_DIRS} )
 
 # Add executable
-add_executable( cpp_example ./src/main.cpp )
+add_executable( xmp_tools ./src/main.cpp )
 
 # Use main source code as a library and target it
-target_link_libraries( cpp_example src )
+target_link_libraries( xmp_tools src )
 
 # Install
-install(TARGETS cpp_example DESTINATION bin)
+install(TARGETS xmp_tools DESTINATION bin)
 
 # Testing
 enable_testing()
 add_test(
-  NAME test_example
-  COMMAND test_example
+  NAME test_xmp_tools
+  COMMAND test_xmp_tools
 )

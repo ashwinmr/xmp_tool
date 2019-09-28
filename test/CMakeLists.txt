@@ -39,10 +39,10 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package( Boost COMPONENTS program_options filesystem )
 
 # Include all dependencies
-include_directories( ../src ${Boost_INCLUDE_DIRS} )
+include_directories( ../include ../libs/XMP/include ${Boost_INCLUDE_DIRS} )
 
 # Add executable
-add_executable( test_example ./test_example.cpp )
+add_executable( test_xmp_tools ./test_xmp_tools.cpp )
 
 # Use main source code as a library and target it along with gtest
-target_link_libraries( test_example src gtest_main )
+target_link_libraries( test_xmp_tools src gtest_main )
