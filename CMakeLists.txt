@@ -11,12 +11,12 @@ project( xmp_tools )
 add_subdirectory (src)
 add_subdirectory (test)
 
-# Find packages for all dependencies
-set(Boost_USE_STATIC_LIBS ON)
-find_package( Boost COMPONENTS program_options filesystem )
-
 # Include all dependencies
+<<<<<<< HEAD
 include_directories( ./include ${Boost_INCLUDE_DIRS} )
+=======
+include_directories( ./include )
+>>>>>>> upstream/master
 
 # Add executable
 add_executable( xmp_tools ./src/main.cpp )
