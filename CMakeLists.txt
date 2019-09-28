@@ -12,11 +12,7 @@ add_subdirectory (src)
 add_subdirectory (test)
 
 # Include all dependencies
-<<<<<<< HEAD
-include_directories( ./include ${Boost_INCLUDE_DIRS} )
-=======
 include_directories( ./include )
->>>>>>> upstream/master
 
 # Add executable
 add_executable( xmp_tools ./src/main.cpp )
