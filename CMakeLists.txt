@@ -11,12 +11,8 @@ project( cpp_example )
 add_subdirectory (src)
 add_subdirectory (test)
 
-# Find packages for all dependencies
-set(Boost_USE_STATIC_LIBS ON)
-find_package( Boost COMPONENTS program_options filesystem )
-
 # Include all dependencies
-include_directories( ./src ${Boost_INCLUDE_DIRS} )
+include_directories( ./include )
 
 # Add executable
 add_executable( cpp_example ./src/main.cpp )
