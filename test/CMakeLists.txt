@@ -35,11 +35,7 @@ endif()
 ##
 
 # Include all dependencies
-<<<<<<< HEAD
-include_directories( ../include ../libs/XMP/include ${Boost_INCLUDE_DIRS} )
-=======
 include_directories( ../include )
->>>>>>> upstream/master
 
 # Add executable
 add_executable( test_xmp_tools ./test_xmp_tools.cpp )
