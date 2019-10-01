@@ -6,6 +6,9 @@ namespace po = boost::program_options;
 
 using namespace std;
 
+/**
+ * Parse command line arguments
+ */
 bool ParseArgs(int argc, const char **argv, po::variables_map &args)
 {
 	try
