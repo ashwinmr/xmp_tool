@@ -64,8 +64,6 @@ vector<string> GetTags(string full_file_path)
 		// If the file is open then read the metadata
 		if (ok)
 		{
-			cout << status << endl;
-			cout << full_file_path << " is opened successfully" << endl;
 			// Create the xmp object and get the xmp data
 			SXMPMeta meta;
 			myFile.GetXMP(&meta);
