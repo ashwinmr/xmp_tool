@@ -13,7 +13,7 @@ add_subdirectory (test)
 
 # Find packages for all dependencies used by main
 set(Boost_USE_STATIC_LIBS ON)
-find_package( Boost COMPONENTS program_options )
+find_package( Boost COMPONENTS program_options filesystem)
 
 # Include all dependencies
 include_directories( ./include ${Boost_INCLUDE_DIRS})
