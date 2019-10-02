@@ -1,11 +1,15 @@
+#include "args.hpp"
+#include "db_tools.hpp"
+#include "xmp_tools.hpp"
 #include <boost/filesystem.hpp>
 #include <iostream>
-#include "args.hpp"
-#include "xmp_tools.hpp"
 
 namespace fs = boost::filesystem;
 
 int main(int argc, const char *argv[]) {
+
+    OpenDB();
+
     // Parse args
     Args args(argc, argv);
     if (!args.valid) {

@@ -6,7 +6,7 @@ find_package( Boost COMPONENTS program_options )
 include_directories(../include ./libs/XMP/include ./libs/sqlite3/include ${Boost_INCLUDE_DIRS} )
 
 # Turn main souce code into a library
-add_library(src xmp_tools.cpp args.cpp )
+add_library(src xmp_tools.cpp args.cpp db_tools.cpp)
 
 # external libs that have to be compiled
 add_subdirectory(./libs/sqlite3)
