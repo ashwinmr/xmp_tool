@@ -1,5 +1,5 @@
-// #ifndef XMP_TOOLS_H_
-// #define XMP_TOOLS_H_
+#ifndef XMP_TOOLS_H_
+#define XMP_TOOLS_H_
 
 #include <vector>
 
@@ -8,4 +8,4 @@
  */
 std::vector<std::string> GetTags(std::string);
 
-// #endif // XMP_TOOLS_H_
+#endif // XMP_TOOLS_H_

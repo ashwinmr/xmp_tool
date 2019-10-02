@@ -6,7 +6,7 @@ find_package( Boost COMPONENTS program_options )
 include_directories(../include ../libs/XMP/include ${Boost_INCLUDE_DIRS} )
 
 # Turn main souce code into a library
-add_library(src xmp_tools.cpp )
+add_library(src xmp_tools.cpp args.cpp )
 
 # external libs that are pre compiled
 add_library(XMPCoreStatic STATIC IMPORTED)
