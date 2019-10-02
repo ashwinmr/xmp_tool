@@ -1,3 +1,4 @@
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,16 +15,16 @@
 // Provide access to the API
 #include "XMP.hpp"
 
-using namespace std;
+namespace fs = boost::filesystem;
 
 /**
  * Get tags from a file
  */
-vector<string> GetTags(string full_file_path) {
-    vector<string> tags;
+std::vector<std::string> GetTags(std::string full_file_path) {
+    std::vector<std::string> tags;
 
     if (!SXMPMeta::Initialize()) {
-        cout << "Could not initialize toolkit!";
+        std::cout << "Could not initialize toolkit!";
         return tags;
     }
     XMP_OptionBits options = 0;
@@ -32,7 +33,7 @@ vector<string> GetTags(string full_file_path) {
 #endif
     // Must initialize SXMPFiles before we use it
     if (!SXMPFiles::Initialize(options)) {
-        cout << "Could not initialize SXMPFiles.";
+        std::cout << "Could not initialize SXMPFiles.";
         return tags;
     }
 
@@ -64,7 +65,7 @@ vector<string> GetTags(string full_file_path) {
             // Get the the entire dc:subject array
             int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
             for (int i = 1; i <= n_tags; i++) {
-                string tag;
+                std::string tag;
                 meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
                 tags.push_back(tag);
             }
@@ -73,10 +74,10 @@ vector<string> GetTags(string full_file_path) {
             // opened as read only but this call must still be made.
             myFile.CloseFile();
         } else {
-            cout << "Unable to open " << full_file_path << endl;
+            std::cout << "Unable to open " << full_file_path << std::endl;
         }
     } catch (XMP_Error &e) {
-        cout << "ERROR: " << e.GetErrMsg() << endl;
+        std::cout << "ERROR: " << e.GetErrMsg() << std::endl;
     }
 
     // Terminate the toolkit
@@ -84,4 +85,23 @@ vector<string> GetTags(string full_file_path) {
     SXMPMeta::Terminate();
 
     return tags;
+}
+
+/**
+ * Get all file paths within a directory
+ */
+std::vector<std::string> GetFilePaths(std::string dir_path) {
+    std::vector<std::string> paths;
+
+    // Check if path is a directory
+    if (!fs::is_directory(dir_path)) {
+        std::cout << "Input path is not directory" << std::endl;
+        return paths;
+    }
+
+    for (fs::directory_entry &de : fs::directory_iterator(dir_path)) {
+        paths.push_back(de.path().string());
+    }
+
+    return paths;
 }
