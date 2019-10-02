@@ -100,7 +100,9 @@ std::vector<std::string> GetFilePaths(std::string dir_path) {
     }
 
     for (fs::directory_entry &de : fs::directory_iterator(dir_path)) {
-        paths.push_back(de.path().string());
+        if(fs::is_regular_file(de.path())){
+            paths.push_back(de.path().string());
+        }
     }
 
     return paths;
