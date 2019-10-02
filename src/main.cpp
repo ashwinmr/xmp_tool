@@ -18,13 +18,13 @@ int main(int argc, const char *argv[]) {
     // Check if path exists
     if (fs::exists(path)) {
         if (fs::is_regular_file(path)) {
-            for (auto &tag : GetTags(path)) {
+            for (auto &tag : GetFileTags(path)) {
                 std::cout << tag << std::endl;
             }
         } else if (fs::is_directory(path)) {
-            std::vector<std::string> paths = GetFilePaths(path);
+            std::vector<std::string> paths = GetFilePaths(path, true);
             for (auto &path : paths) {
-                std::vector<std::string> tags = GetTags(path);
+                std::vector<std::string> tags = GetFileTags(path);
                 if (tags.empty()) {
                     continue;
                 }

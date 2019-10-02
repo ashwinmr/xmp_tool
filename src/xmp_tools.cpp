@@ -20,7 +20,7 @@ namespace fs = boost::filesystem;
 /**
  * Get tags from a file
  */
-std::vector<std::string> GetTags(std::string full_file_path) {
+std::vector<std::string> GetFileTags(std::string full_file_path) {
     std::vector<std::string> tags;
 
     if (!SXMPMeta::Initialize()) {
@@ -90,7 +90,7 @@ std::vector<std::string> GetTags(std::string full_file_path) {
 /**
  * Get all file paths within a directory
  */
-std::vector<std::string> GetFilePaths(std::string dir_path) {
+std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {
     std::vector<std::string> paths;
 
     // Check if path is a directory
@@ -99,9 +99,17 @@ std::vector<std::string> GetFilePaths(std::string dir_path) {
         return paths;
     }
 
-    for (fs::directory_entry &de : fs::directory_iterator(dir_path)) {
-        if(fs::is_regular_file(de.path())){
-            paths.push_back(de.path().string());
+    if (recurse) {
+        for (fs::directory_entry &de : fs::recursive_directory_iterator(dir_path)) {
+            if (fs::is_regular_file(de.path())) {
+                paths.push_back(de.path().string());
+            }
+        }
+    } else {
+        for (fs::directory_entry &de : fs::directory_iterator(dir_path)) {
+            if (fs::is_regular_file(de.path())) {
+                paths.push_back(de.path().string());
+            }
         }
     }
 
