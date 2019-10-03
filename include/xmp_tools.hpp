@@ -13,4 +13,9 @@ std::vector<std::string> GetFileTags(std::string full_file_path);
  */
 std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse);
 
+/**
+ * Get and store tags for all paths in a vector into a database
+ */
+void GetAndStoreTags(std::vector<std::string> paths, std::string db_path);
+
 #endif // XMP_TOOLS_H_

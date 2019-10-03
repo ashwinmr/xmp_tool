@@ -16,7 +16,7 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package( Boost COMPONENTS filesystem)
 
 # Include all dependencies
-include_directories( ./include ${Boost_INCLUDE_DIRS})
+include_directories( ./include ./src/libs/sqlite3/include ${Boost_INCLUDE_DIRS})
 
 # Add executable
 add_executable( xmp_tools ./src/main.cpp )

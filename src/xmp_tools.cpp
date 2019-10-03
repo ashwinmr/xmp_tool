@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "db_tools.hpp"
 
 // Must be defined to instantiate template classes
 #define TXMP_STRING_TYPE std::string
@@ -77,7 +78,7 @@ std::vector<std::string> GetFileTags(std::string full_file_path) {
             std::cout << "Unable to open " << full_file_path << std::endl;
         }
     } catch (XMP_Error &e) {
-        std::cout << "ERROR: " << e.GetErrMsg() << std::endl;
+        std::cout << "Error opening " + full_file_path + ":\n\t" << e.GetErrMsg() << std::endl;
     }
 
     // Terminate the toolkit
@@ -114,4 +115,24 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {
     }
 
     return paths;
+}
+
+/**
+ * Get and store tags for all paths in a vector into a database
+ */
+void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
+    // Open database
+    Db db(db_path);
+    if(!db.IsOpen()){
+        return;
+    }
+
+    for (auto &path : paths) {
+        std::vector<std::string> tags = GetFileTags(path);
+        if (!tags.empty()) {
+            for (auto &tag : tags) {
+                db.InsertRow(path, tag);
+            }
+        }
+    }
 }
