@@ -16,11 +16,9 @@ Db::Db(std::string db_path) {
     if (!db_path.empty()) {
 
         // Check if database already exists
-        if (fs::exists(db_path)) {
-            if (fs::is_regular_file(db_path)) {
-                std::cout << "Database already exists" << std::endl;
-                return;
-            }
+        if (fs::is_regular_file(db_path)) {
+            std::cout << "Database already exists" << std::endl;
+            return;
         }
         ec = sqlite3_open(db_path.c_str(), &dbc);
     } else {
