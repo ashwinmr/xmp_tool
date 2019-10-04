@@ -19,8 +19,8 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse);
 void GetAndStoreTags(std::vector<std::string> paths, std::string db_path);
 
 /**
- * Select rows
+ * Get all paths that have a tag 
  */
-void SelectRows(std::string db_path, std::string tag);
+void PrintPathsForTag(std::string db_path, std::string tag);
 
 #endif // XMP_TOOLS_H_

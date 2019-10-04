@@ -147,7 +147,7 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
 /**
  * Select rows
  */
-void SelectRows(std::string db_path, std::string tag){
+void PrintPathsForTag(std::string db_path, std::string tag){
     // Check if database doesnt exist
     if (!fs::is_regular_file(db_path)) {
         std::cout << "Database doesn't exists" << std::endl;
@@ -161,5 +161,10 @@ void SelectRows(std::string db_path, std::string tag){
     }
 
     // Select from database
-    db.SelectRows(tag);
+    std::vector<std::string> paths = db.SelectPaths(tag);
+
+    // Print paths
+    for(auto& path: paths){
+        std::cout << path << std:: endl;
+    }
 }

@@ -37,7 +37,7 @@ int main(int argc, const char *argv[]) {
 
     // Check if path exists
     if (fs::is_regular_file(db_path)){
-        SelectRows(db_path,"beach");
+        PrintPathsForTag(db_path,tag);
     }
 
     return 0;

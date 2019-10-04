@@ -3,6 +3,7 @@
 
 #include "sqlite3.h"
 #include <string>
+#include <vector>
 
 class Db{
     public:
@@ -18,9 +19,9 @@ class Db{
     void InsertRow(std::string path, std::string tag);
 
     /**
-     * Select rows from the table of the database
+     * Select paths from the table of the database
      */
-    void SelectRows(std::string tag);
+    std::vector<std::string> SelectPaths(std::string tag);
 
     /**
      * Desctuctor closes the database
