@@ -18,4 +18,9 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse);
  */
 void GetAndStoreTags(std::vector<std::string> paths, std::string db_path);
 
+/**
+ * Select rows
+ */
+void SelectRows(std::string db_path, std::string tag);
+
 #endif // XMP_TOOLS_H_

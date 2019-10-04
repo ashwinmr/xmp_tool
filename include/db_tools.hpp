@@ -18,6 +18,11 @@ class Db{
     void InsertRow(std::string path, std::string tag);
 
     /**
+     * Select rows from the table of the database
+     */
+    void SelectRows(std::string tag);
+
+    /**
      * Desctuctor closes the database
      */
     ~Db();
@@ -28,7 +33,21 @@ class Db{
     bool IsOpen();
 
     private:
-    void ExecSql(std::string sql);
+
+    /**
+     * Execute SQL for the open database without a callback
+     */
+    void Db::ExecSqlNoCallback(std::string sql);
+
+    /**
+     * Create file_tags table
+     */
+    void Db::CreateFileTagsTable();
+
+    /**
+     * Callback for select statement
+     */
+    static int SelectCallback(void* not_used, int n_cols, char** values, char** headers);
 
     sqlite3* dbc = NULL;
 };

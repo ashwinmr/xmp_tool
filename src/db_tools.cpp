@@ -14,12 +14,6 @@ Db::Db(std::string db_path) {
     int ec;
 
     if (!db_path.empty()) {
-
-        // Check if database already exists
-        if (fs::is_regular_file(db_path)) {
-            std::cout << "Database already exists" << std::endl;
-            return;
-        }
         ec = sqlite3_open(db_path.c_str(), &dbc);
     } else {
         // Create table in memory
@@ -35,7 +29,14 @@ Db::Db(std::string db_path) {
     // Store database connection
     this->dbc = dbc;
 
-    // Create the file_tags table
+    // Create file tags table if not already present
+    this->CreateFileTagsTable();
+}
+
+/**
+ * Create file_tags table
+ */
+void Db::CreateFileTagsTable() {
 
     // Create sql statement
     std::string sql =
@@ -43,14 +44,14 @@ Db::Db(std::string db_path) {
         "path text,"
         "tag text);";
 
-    this->ExecSql(sql);
+    this->ExecSqlNoCallback(sql);
 }
 
 /**
- * Execute SQL for the open database
+ * Execute SQL for the open database without a callback
  */
-void Db::ExecSql(std::string sql) {
-    /* Execute SQL statement */
+void Db::ExecSqlNoCallback(std::string sql) {
+    // Execute sql
     char* err_msg = 0;
     int ec;
     ec = sqlite3_exec(this->dbc, sql.c_str(), NULL, NULL, &err_msg);
@@ -90,5 +91,38 @@ void Db::InsertRow(std::string path, std::string tag) {
     // Create sql statement
     std::string sql = "insert into file_tags values(\"" + path + "\",\"" + tag + "\");";
 
-    this->ExecSql(sql);
+    // Execute sql
+    this->ExecSqlNoCallback(sql);
+}
+
+/**
+ * Select rows from the table of the database
+ */
+void Db::SelectRows(std::string tag) {
+    // Create sql statement
+    std::string sql = "select * from file_tags where tag == \"" + tag + "\";";
+
+    // Execute sql
+    char* err_msg = 0;
+    int ec;
+    ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, NULL, &err_msg);
+    if (ec != SQLITE_OK) {
+        std::cout << "Error executing select statement:\n\t" << *err_msg << std::endl;
+        sqlite3_free(err_msg);
+        return;
+    }
+}
+
+/**
+ * Callback for select statement
+ */
+int Db::SelectCallback(void* not_used, int n_cols, char** values, char** headers) {
+
+    // Print the values
+    for(int i=0; i< n_cols; i++){
+        std::cout << std::string(values[i]) << "\t";
+    }
+    std::cout << std::endl;
+
+    return 0;
 }

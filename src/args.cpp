@@ -17,6 +17,7 @@ Args::Args(int argc, const char **argv) {
         desc.add_options()("help,h", "Help message")
         ("path,p", po::value<std::string>()->required(), "Path to file or directory")
         ("db_path,d", po::value<std::string>()->default_value(""),"Path to database")
+        ("tag,t",po::value<std::string>()->default_value(""),"Tag")
         ;
 
         // Make options positional
@@ -38,6 +39,7 @@ Args::Args(int argc, const char **argv) {
         // Store inputs
         this->path = args["path"].as<std::string>();
         this->db_path = args["db_path"].as<std::string>();
+        this->tag = args["tag"].as<std::string>();
 
         // Parsing successful
         this->valid = true;

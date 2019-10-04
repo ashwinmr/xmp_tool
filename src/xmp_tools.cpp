@@ -121,12 +121,19 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {
  * Get and store tags for all paths in a vector into a database
  */
 void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
-    // Open database
+    // Check if database already exists
+    if (fs::is_regular_file(db_path)) {
+        std::cout << "Database already exists" << std::endl;
+        return;
+    }
+
+    // Create and open database
     Db db(db_path);
     if(!db.IsOpen()){
         return;
     }
 
+    // Insert into database
     for (auto &path : paths) {
         std::vector<std::string> tags = GetFileTags(path);
         if (!tags.empty()) {
@@ -135,4 +142,24 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
             }
         }
     }
+}
+
+/**
+ * Select rows
+ */
+void SelectRows(std::string db_path, std::string tag){
+    // Check if database doesnt exist
+    if (!fs::is_regular_file(db_path)) {
+        std::cout << "Database doesn't exists" << std::endl;
+        return;
+    }
+
+    // Open database
+    Db db(db_path);
+    if(!db.IsOpen()){
+        return;
+    }
+
+    // Select from database
+    db.SelectRows(tag);
 }
