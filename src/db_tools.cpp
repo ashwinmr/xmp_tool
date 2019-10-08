@@ -106,10 +106,6 @@ std::vector<std::string> Db::SelectTagQuery(std::string tag_query) {
     // Generate sql statement
     std::string sql = this->GenSql(tag_query);
 
-    // // Create sql statement
-    // std::string sql =
-    // "select * from file_tags as t0 inner join ( select * from file_tags where tag == \"x\" ) as t1 on t1.path == t0.path inner join ( select * from file_tags where tag == \"figure\" ) as t2 on t2.path == t0.path group by t0.path ;";
-
     // Execute sql
     char* err_msg = 0;
     int ec;
@@ -161,6 +157,10 @@ std::vector<std::string> Db::Tokenize(std::string query) {
 std::string Db::GenSql(std::string tag_query) {
 
     std::string result = "select * from file_tags ";
+
+    // // Create sql statement
+    // std::string sql =
+    // "select * from file_tags as t0 inner join ( select * from file_tags where tag == \"x\" ) as t1 on t1.path == t0.path inner join ( select * from file_tags where tag == \"figure\" ) as t2 on t2.path == t0.path group by t0.path ;";
 
     std::vector<std::string> tokens = this->Tokenize(tag_query);
 
