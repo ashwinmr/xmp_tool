@@ -98,21 +98,24 @@ void Db::InsertRow(std::string path, std::string tag) {
 /**
  * Select paths from the table of the database
  */
-std::vector<std::string> Db::SelectPaths(std::string tag) {
-    // Create sql statement
-    std::string sql = "select path from file_tags where tag == \"" + tag + "\" group by path;";
+std::vector<std::string> Db::SelectTagQuery(std::string tag_query) {
+
+    std::cout << tag_query << std::endl;
+
+    // // Create sql statement
+    // std::string sql = "select path from file_tags where tag == \"" + tag + "\" group by path;";
 
     std::vector<std::string> result_paths;
 
-    // Execute sql
-    char* err_msg = 0;
-    int ec;
-    ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
-    if (ec != SQLITE_OK) {
-        std::cout << "Error executing select statement:\n\t" << *err_msg << std::endl;
-        sqlite3_free(err_msg);
-        return result_paths;
-    }
+    // // Execute sql
+    // char* err_msg = 0;
+    // int ec;
+    // ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
+    // if (ec != SQLITE_OK) {
+    //     std::cout << "Error executing select statement:\n\t" << *err_msg << std::endl;
+    //     sqlite3_free(err_msg);
+    //     return result_paths;
+    // }
 
     return result_paths;
 }

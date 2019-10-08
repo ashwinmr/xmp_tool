@@ -17,27 +17,27 @@ int main(int argc, const char *argv[]) {
     // Store path
     std::string path = args.path;
     std::string db_path = args.db_path;
-    std::string tag = args.tag;
+    std::string tag_query = args.tag_query;
 
-    // // Check if path exists
-    // if (fs::exists(path)) {
-    //     if (fs::is_regular_file(path)) {
-    //         std::vector<std::string> paths;
-    //         paths.push_back(path);
-    //         GetAndStoreTags(paths,db_path);
-    //     } else if (fs::is_directory(path)) {
-    //         std::vector<std::string> paths = GetFilePaths(path, true);
-    //         GetAndStoreTags(paths,db_path);
-    //     } else {
-    //         std::cout << "Input path exists, but is not a file or directory" << std::endl;
-    //     }
-    // } else {
-    //     std::cout << "Input path does not exist" << std::endl;
-    // }
+    // Check if path exists
+    if (fs::exists(path)) {
+        if (fs::is_regular_file(path)) {
+            std::vector<std::string> paths;
+            paths.push_back(path);
+            GetAndStoreTags(paths,db_path);
+        } else if (fs::is_directory(path)) {
+            std::vector<std::string> paths = GetFilePaths(path, true);
+            GetAndStoreTags(paths,db_path);
+        } else {
+            std::cout << "Input path exists, but is not a file or directory" << std::endl;
+        }
+    } else {
+        std::cout << "Input path does not exist" << std::endl;
+    }
 
     // Check if path exists
     if (fs::is_regular_file(db_path)){
-        PrintPathsForTag(db_path,tag);
+        PrintPathsForTagQuery(db_path,tag_query);
     }
 
     return 0;

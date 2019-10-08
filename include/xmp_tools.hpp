@@ -21,6 +21,6 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path);
 /**
  * Get all paths that have a tag 
  */
-void PrintPathsForTag(std::string db_path, std::string tag);
+void PrintPathsForTagQuery(std::string db_path, std::string tag);
 
 #endif // XMP_TOOLS_H_

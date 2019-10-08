@@ -147,10 +147,10 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
 /**
  * Select rows
  */
-void PrintPathsForTag(std::string db_path, std::string tag){
+void PrintPathsForTagQuery(std::string db_path, std::string tag_query){
     // Check if database doesnt exist
     if (!fs::is_regular_file(db_path)) {
-        std::cout << "Database doesn't exists" << std::endl;
+        std::cout << "Database doesn't exist" << std::endl;
         return;
     }
 
@@ -161,7 +161,7 @@ void PrintPathsForTag(std::string db_path, std::string tag){
     }
 
     // Select from database
-    std::vector<std::string> paths = db.SelectPaths(tag);
+    std::vector<std::string> paths = db.SelectTagQuery(tag_query);
 
     // Print paths
     for(auto& path: paths){

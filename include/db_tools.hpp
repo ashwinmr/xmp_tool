@@ -21,7 +21,7 @@ class Db{
     /**
      * Select paths from the table of the database
      */
-    std::vector<std::string> SelectPaths(std::string tag);
+    std::vector<std::string> SelectTagQuery(std::string tag);
 
     /**
      * Desctuctor closes the database
