@@ -1,5 +1,7 @@
 #include "db_tools.hpp"
 #include "sqlite3.h"
+#include <string>
+#include <queue>
 #include <regex>
 #include <boost/filesystem.hpp>
 #include <iostream>
@@ -104,17 +106,25 @@ std::vector<std::string> Db::SelectTagQuery(std::string tag_query) {
     std::vector<std::string> result_paths;
 
     // Generate sql statement
-    std::string sql = this->GenSql(tag_query);
-
-    // Execute sql
-    char* err_msg = 0;
-    int ec;
-    ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
-    if (ec != SQLITE_OK) {
-        std::cout << "Error executing select statement:\n\t" << err_msg << std::endl;
-        sqlite3_free(err_msg);
-        return result_paths;
+    std::string sql;
+    try{
+        sql = this->GenSql(tag_query);
     }
+    catch(const std::invalid_argument& e){
+        std::cout << "GenSql Exception: \n\t" << e.what() << std::endl;
+    }
+
+    std::cout << sql << std::endl;
+
+    // // Execute sql
+    // char* err_msg = 0;
+    // int ec;
+    // ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
+    // if (ec != SQLITE_OK) {
+    //     std::cout << "Error executing select statement:\n\t" << err_msg << std::endl;
+    //     sqlite3_free(err_msg);
+    //     return result_paths;
+    // }
 
     return result_paths;
 }
@@ -156,13 +166,44 @@ std::vector<std::string> Db::Tokenize(std::string query) {
  */
 std::string Db::GenSql(std::string tag_query) {
 
-    std::string result = "select * from file_tags ";
-
     // // Create sql statement
     // std::string sql =
     // "select * from file_tags as t0 inner join ( select * from file_tags where tag == \"x\" ) as t1 on t1.path == t0.path inner join ( select * from file_tags where tag == \"figure\" ) as t2 on t2.path == t0.path group by t0.path ;";
 
     std::vector<std::string> tokens = this->Tokenize(tag_query);
+
+    if(tokens.size() == 0){
+        return "select * from file_tags;";
+    }
+
+    std::queue<std::string> qu;
+    for(auto &token: tokens){
+        qu.push(token);
+    }
+
+    std::string result = "select * from file_tags as t0 ";
+
+    int count = 1;
+
+    while(!qu.empty()){
+
+        if(qu.front() == "not"){
+            qu.pop();
+            if(qu.empty()){
+                throw std::invalid_argument("token required after not ");
+            }
+            result += " inner join ( select * from file_tags where tag != \"" + qu.front() + "\" ) as t" + std::to_string(count) + " on t" + std::to_string(count) + ".path == t0.path ";
+            qu.pop();
+            if(!qu.empty()){
+                if(qu.front() == "not"){
+                    throw std::invalid_argument("not can't follow not");
+                }
+            }
+            count++;
+        }
+    }
+
+    result += " group by t0.path;";
 
     return result;
 }
