@@ -50,6 +50,16 @@ class Db{
      */
     static int SelectCallback(void* not_used, int n_cols, char** values, char** headers);
 
+    /**
+     * Tokenize an input query
+     */
+    std::vector<std::string> Db::Tokenize(std::string query);
+
+    /**
+     * Generate sql from tag query
+     */
+    std::string Db::GenSql(std::string tag_query);
+
     sqlite3* dbc = NULL;
 };
 

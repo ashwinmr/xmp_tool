@@ -1,7 +1,8 @@
 #include "db_tools.hpp"
+#include "sqlite3.h"
+#include <regex>
 #include <boost/filesystem.hpp>
 #include <iostream>
-#include "sqlite3.h"
 
 namespace fs = boost::filesystem;
 
@@ -56,7 +57,7 @@ void Db::ExecSqlNoCallback(std::string sql) {
     int ec;
     ec = sqlite3_exec(this->dbc, sql.c_str(), NULL, NULL, &err_msg);
     if (ec != SQLITE_OK) {
-        std::cout << "Error executing sql:\n\t" << *err_msg << std::endl;
+        std::cout << "Error executing sql:\n\t" << err_msg << std::endl;
         sqlite3_free(err_msg);
         return;
     }
@@ -100,22 +101,24 @@ void Db::InsertRow(std::string path, std::string tag) {
  */
 std::vector<std::string> Db::SelectTagQuery(std::string tag_query) {
 
-    std::cout << tag_query << std::endl;
-
-    // // Create sql statement
-    // std::string sql = "select path from file_tags where tag == \"" + tag + "\" group by path;";
-
     std::vector<std::string> result_paths;
 
-    // // Execute sql
-    // char* err_msg = 0;
-    // int ec;
-    // ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
-    // if (ec != SQLITE_OK) {
-    //     std::cout << "Error executing select statement:\n\t" << *err_msg << std::endl;
-    //     sqlite3_free(err_msg);
-    //     return result_paths;
-    // }
+    // Generate sql statement
+    std::string sql = this->GenSql(tag_query);
+
+    // // Create sql statement
+    // std::string sql =
+    // "select * from file_tags as t0 inner join ( select * from file_tags where tag == \"x\" ) as t1 on t1.path == t0.path inner join ( select * from file_tags where tag == \"figure\" ) as t2 on t2.path == t0.path group by t0.path ;";
+
+    // Execute sql
+    char* err_msg = 0;
+    int ec;
+    ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
+    if (ec != SQLITE_OK) {
+        std::cout << "Error executing select statement:\n\t" << err_msg << std::endl;
+        sqlite3_free(err_msg);
+        return result_paths;
+    }
 
     return result_paths;
 }
@@ -131,4 +134,35 @@ int Db::SelectCallback(void* data, int n_cols, char** values, char** headers) {
     result_paths->push_back(values[0]);
 
     return 0;
+}
+
+/**
+ * Tokenize an input query
+ */
+std::vector<std::string> Db::Tokenize(std::string query) {
+
+    std::vector<std::string> result;
+
+    // Regex expression
+    std::regex ex("\\w+");
+
+    std::regex_iterator<std::string::iterator> pos(query.begin(),query.end(), ex);
+    std::regex_iterator<std::string::iterator> end; // Default constructor defines past-the-end iterator
+    for (; pos != end; pos++) {
+        result.push_back(pos->str(0));
+    }
+
+    return result;
+}
+
+/**
+ * Generate sql from tag query
+ */
+std::string Db::GenSql(std::string tag_query) {
+
+    std::string result = "select * from file_tags ";
+
+    std::vector<std::string> tokens = this->Tokenize(tag_query);
+
+    return result;
 }
