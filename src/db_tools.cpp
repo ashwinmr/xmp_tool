@@ -116,15 +116,15 @@ std::vector<std::string> Db::SelectTagQuery(std::string tag_query) {
 
     std::cout << sql << std::endl;
 
-    // // Execute sql
-    // char* err_msg = 0;
-    // int ec;
-    // ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
-    // if (ec != SQLITE_OK) {
-    //     std::cout << "Error executing select statement:\n\t" << err_msg << std::endl;
-    //     sqlite3_free(err_msg);
-    //     return result_paths;
-    // }
+    // Execute sql
+    char* err_msg = 0;
+    int ec;
+    ec = sqlite3_exec(this->dbc, sql.c_str(), this->SelectCallback, static_cast<void*>(&result_paths), &err_msg);
+    if (ec != SQLITE_OK) {
+        std::cout << "Error executing select statement:\n\t" << err_msg << std::endl;
+        sqlite3_free(err_msg);
+        return result_paths;
+    }
 
     return result_paths;
 }
@@ -176,31 +176,50 @@ std::string Db::GenSql(std::string tag_query) {
         return "select * from file_tags;";
     }
 
-    std::queue<std::string> qu;
-    for(auto &token: tokens){
-        qu.push(token);
+    std::vector<std::queue<std::string>> token_queues;
+
+    std::queue<std::string> temp;
+
+    for(auto& token: tokens){
+        if(token != "and"){
+            temp.push(token);
+        }
+        else{
+            token_queues.push_back(temp);
+            temp = std::queue<std::string>();
+        }
+    }
+    if(!temp.empty()){
+        token_queues.push_back(temp);
     }
 
     std::string result = "select * from file_tags as t0 ";
+    int id = 1;
 
-    int count = 1;
+    for(auto& tq: token_queues){
+        result += " inner join ( select * from file_tags where ";
 
-    while(!qu.empty()){
-
-        if(qu.front() == "not"){
-            qu.pop();
-            if(qu.empty()){
-                throw std::invalid_argument("token required after not ");
-            }
-            result += " inner join ( select * from file_tags where tag != \"" + qu.front() + "\" ) as t" + std::to_string(count) + " on t" + std::to_string(count) + ".path == t0.path ";
-            qu.pop();
-            if(!qu.empty()){
-                if(qu.front() == "not"){
-                    throw std::invalid_argument("not can't follow not");
+        while(!tq.empty()){
+            if(tq.front() == "not"){
+                tq.pop();
+                if(tq.empty()){
+                    throw std::invalid_argument("Error: invalid tag query, not can't be last token");
                 }
+                result += " tag != \"" + tq.front() + "\" ";
+                tq.pop();
             }
-            count++;
+            else if(tq.front() == "or"){
+                result += " | ";
+                tq.pop();
+            }
+            else{
+                result += " tag == \"" + tq.front() + "\" ";
+                tq.pop();
+            }
         }
+
+        result += " ) as t" + std::to_string(id) + " on t" + std::to_string(id) + ".path == t0.path ";
+        id++;
     }
 
     result += " group by t0.path;";
