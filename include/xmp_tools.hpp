@@ -6,7 +6,7 @@
 /**
  * Get tags from a file
  */
-std::vector<std::string> GetFileTags(std::string full_file_path);
+std::vector<std::string> GetTagsFromFile(std::string full_file_path);
 
 /**
  * Add tags to file
@@ -21,7 +21,7 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse);
 /**
  * Get and store tags for all paths in a vector into a database
  */
-void GetAndStoreTags(std::vector<std::string> paths, std::string db_path);
+void GetAndStoreTags(std::vector<std::string>& paths, std::string db_path);
 
 /**
  * Get all paths that have a tag 

@@ -21,7 +21,7 @@ namespace fs = boost::filesystem;
 /**
  * Get tags from a file
  */
-std::vector<std::string> GetFileTags(std::string full_file_path) {
+std::vector<std::string> GetTagsFromFile(std::string full_file_path) {
     std::vector<std::string> tags;
 
     if (!SXMPMeta::Initialize()) {
@@ -204,7 +204,7 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {
 /**
  * Get and store tags for all paths in a vector into a database
  */
-void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
+void GetAndStoreTags(std::vector<std::string>& paths, std::string db_path) {
     // Check if database already exists
     if (fs::is_regular_file(db_path)) {
         std::cout << "Database already exists" << std::endl;
@@ -219,7 +219,7 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
 
     // Insert into database
     for (auto &path : paths) {
-        std::vector<std::string> tags = GetFileTags(path);
+        std::vector<std::string> tags = GetTagsFromFile(path);
         if (!tags.empty()) {
             for (auto &tag : tags) {
                 db.InsertRow(path, tag);
