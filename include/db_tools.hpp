@@ -46,6 +46,11 @@ class Db{
     void Db::CreateFileTagsTable();
 
     /**
+     * Check if token is a logical
+     */
+    static bool Db::IsLogical(std::string token);
+
+    /**
      * Callback for select statement
      */
     static int SelectCallback(void* not_used, int n_cols, char** values, char** headers);

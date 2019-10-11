@@ -162,6 +162,18 @@ std::vector<std::string> Db::Tokenize(std::string query) {
 }
 
 /**
+ * Check if token is a logical
+ */
+bool Db::IsLogical(std::string token){
+    if(token == "not" | token == "and" | token == "or"){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+/**
  * Generate sql from tag query
  */
 std::string Db::GenSql(std::string tag_query) {
@@ -176,53 +188,48 @@ std::string Db::GenSql(std::string tag_query) {
         return "select * from file_tags;";
     }
 
-    std::vector<std::queue<std::string>> token_queues;
+    int idx = 0;
+    int idx_max = tokens.size()-1;
 
-    std::queue<std::string> temp;
+    std::string result = "";
 
-    for(auto& token: tokens){
-        if(token != "and"){
-            temp.push(token);
-        }
-        else{
-            token_queues.push_back(temp);
-            temp = std::queue<std::string>();
-        }
-    }
-    if(!temp.empty()){
-        token_queues.push_back(temp);
-    }
+    while(idx <= idx_max){
 
-    std::string result = "select * from file_tags as t0 ";
-    int id = 1;
-
-    for(auto& tq: token_queues){
-        result += " inner join ( select * from file_tags where ";
-
-        while(!tq.empty()){
-            if(tq.front() == "not"){
-                tq.pop();
-                if(tq.empty()){
-                    throw std::invalid_argument("Error: invalid tag query, not can't be last token");
-                }
-                result += " tag != \"" + tq.front() + "\" ";
-                tq.pop();
-            }
-            else if(tq.front() == "or"){
-                result += " | ";
-                tq.pop();
+        if(tokens[idx] == "not"){
+            if(idx + 1 > idx_max){
+                throw std::invalid_argument("Error: invalid tag query, not cannot be last token");
             }
             else{
-                result += " tag == \"" + tq.front() + "\" ";
-                tq.pop();
+                idx++;
+                result += " select path from file_tags left join ( select path from file_tags where tag == \"" + tokens[idx] + "\" ) as t using(path) where t.path is null";
+                idx++;
             }
         }
-
-        result += " ) as t" + std::to_string(id) + " on t" + std::to_string(id) + ".path == t0.path ";
-        id++;
+        else if(tokens[idx] == "and"){
+            if(idx == 0){
+                throw std::invalid_argument("Error: invalid tag query, and cannot be first token");
+            }
+            else{
+                result += " intersect ";
+                idx++;
+            }
+        }
+        else if(tokens[idx] == "or"){
+            if(idx == 0){
+                throw std::invalid_argument("Error: invalid tag query, or cannot be first token");
+            }
+            else{
+                result += " union ";
+                idx++;
+            }
+        }
+        else{
+            result += " select path from file_tags where tag == \"" + tokens[idx] + "\" ";
+            idx++;
+        }
     }
 
-    result += " group by t0.path;";
+    result += " group by path ";
 
     return result;
 }
