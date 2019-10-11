@@ -178,14 +178,10 @@ bool Db::IsLogical(std::string token){
  */
 std::string Db::GenSql(std::string tag_query) {
 
-    // // Create sql statement
-    // std::string sql =
-    // "select * from file_tags as t0 inner join ( select * from file_tags where tag == \"x\" ) as t1 on t1.path == t0.path inner join ( select * from file_tags where tag == \"figure\" ) as t2 on t2.path == t0.path group by t0.path ;";
-
     std::vector<std::string> tokens = this->Tokenize(tag_query);
 
     if(tokens.size() == 0){
-        return "select * from file_tags;";
+        return "select path from file_tags group by path;";
     }
 
     int idx = 0;
@@ -229,7 +225,7 @@ std::string Db::GenSql(std::string tag_query) {
         }
     }
 
-    result += " group by path ";
+    result += " group by path;";
 
     return result;
 }
