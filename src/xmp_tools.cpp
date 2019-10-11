@@ -173,6 +173,18 @@ bool AddTagsToFile(std::string full_file_path, std::vector<std::string> &tags) {
 }
 
 /**
+ * Add tags to files
+ */
+void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& tags){
+
+    for(auto& path: paths){
+        if(!AddTagsToFile(path,tags)){
+            std::cout << "Warning: Failed to add tags to " << path << std::endl;
+        } 
+    }
+}
+
+/**
  * Get all file paths within a directory
  */
 std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {

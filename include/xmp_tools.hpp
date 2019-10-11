@@ -14,6 +14,11 @@ std::vector<std::string> GetTagsFromFile(std::string full_file_path);
 bool AddTagsToFile(std::string full_file_path, std::vector<std::string>& tags);
 
 /**
+ * Add tags to files
+ */
+void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& tags);
+
+/**
  * Get all file paths within a directory
  */
 std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse);
