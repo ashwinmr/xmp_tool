@@ -89,6 +89,19 @@ std::vector<std::string> GetFileTags(std::string full_file_path) {
 }
 
 /**
+ * Add tags to file
+ */
+bool AddTagsToFile(std::string full_file_path, std::vector<std::string>& tags){
+
+    // If not tags provided return success
+    if(tags.empty()){
+        return true;
+    }
+
+
+}
+
+/**
  * Get all file paths within a directory
  */
 std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {
