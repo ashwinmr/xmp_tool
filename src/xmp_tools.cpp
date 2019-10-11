@@ -91,14 +91,85 @@ std::vector<std::string> GetFileTags(std::string full_file_path) {
 /**
  * Add tags to file
  */
-bool AddTagsToFile(std::string full_file_path, std::vector<std::string>& tags){
+bool AddTagsToFile(std::string full_file_path, std::vector<std::string> &tags) {
+    bool success = false;
 
     // If not tags provided return success
-    if(tags.empty()){
-        return true;
+    if (tags.empty()) {
+        success = true;
+        return success;
     }
 
+    if (!SXMPMeta::Initialize()) {
+        std::cout << "Could not initialize toolkit!";
+        return success;
+    }
 
+    XMP_OptionBits options = 0;
+#if UNIX_ENV
+    options |= kXMPFiles_ServerMode;
+#endif
+
+    // Must initialize SXMPFiles before we use it
+    if (!SXMPFiles::Initialize(options)) {
+        std::cout << "Could not initialize SXMPFiles.";
+        return success;
+    }
+
+    try {
+        // Options to open the file with - open for editing and use a smart handler
+        XMP_OptionBits opts = kXMPFiles_OpenForUpdate | kXMPFiles_OpenUseSmartHandler;
+
+        bool ok;
+        SXMPFiles myFile;
+        std::string status = "";
+
+        // First we try and open the file
+        ok = myFile.OpenFile(full_file_path, kXMP_UnknownFile, opts);
+        if (!ok) {
+            status += "No smart handler available for " + full_file_path + "\n";
+            status += "Trying packet scanning.\n";
+
+            // Now try using packet scanning
+            opts = kXMPFiles_OpenForUpdate | kXMPFiles_OpenUsePacketScanning;
+            ok = myFile.OpenFile(full_file_path, kXMP_UnknownFile, opts);
+        }
+
+        // If the file is open then read get the XMP data
+        if (ok) {
+            // Create the XMP object and get the XMP data
+            SXMPMeta meta;
+            myFile.GetXMP(&meta);
+
+            // Now modify the XMP
+            for (auto &tag : tags) {
+                // Note the options used, kXMP_PropArrayIsOrdered, if the array does not exist it will be created
+                meta.AppendArrayItem(kXMP_NS_DC, "subject", kXMP_PropArrayIsOrdered, tag, 0);
+            }
+
+            // Check we can put the XMP packet back into the file
+            if (myFile.CanPutXMP(meta)) {
+                // If so then update the file with the modified XMP
+                myFile.PutXMP(meta);
+
+                success = true;
+            }
+
+            // Close the SXMPFile.  This *must* be called.  The XMP is not
+            // actually written and the disk file is not closed until this call is made.
+            myFile.CloseFile();
+        } else {
+            std::cout << "Unable to open " << full_file_path << std::endl;
+        }
+    } catch (XMP_Error &e) {
+        std::cout << "Error opening " + full_file_path + ":\n\t" << e.GetErrMsg() << std::endl;
+    }
+
+    // Terminate the toolkit
+    SXMPFiles::Terminate();
+    SXMPMeta::Terminate();
+
+    return success;
 }
 
 /**
@@ -142,7 +213,7 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
 
     // Create and open database
     Db db(db_path);
-    if(!db.IsOpen()){
+    if (!db.IsOpen()) {
         return;
     }
 
@@ -160,7 +231,7 @@ void GetAndStoreTags(std::vector<std::string> paths, std::string db_path) {
 /**
  * Select rows
  */
-void PrintPathsForTagQuery(std::string db_path, std::string tag_query){
+void PrintPathsForTagQuery(std::string db_path, std::string tag_query) {
     // Check if database doesnt exist
     if (!fs::is_regular_file(db_path)) {
         std::cout << "Database doesn't exist" << std::endl;
@@ -169,7 +240,7 @@ void PrintPathsForTagQuery(std::string db_path, std::string tag_query){
 
     // Open database
     Db db(db_path);
-    if(!db.IsOpen()){
+    if (!db.IsOpen()) {
         return;
     }
 
@@ -177,7 +248,7 @@ void PrintPathsForTagQuery(std::string db_path, std::string tag_query){
     std::vector<std::string> paths = db.SelectTagQuery(tag_query);
 
     // Print paths
-    for(auto& path: paths){
-        std::cout << path << std:: endl;
+    for (auto &path : paths) {
+        std::cout << path << std::endl;
     }
 }
