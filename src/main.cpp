@@ -17,23 +17,22 @@ int main(int argc, const char *argv[]) {
     // Store args
     std::string path = args.path;
     std::string db_path = args.db_path;
-    std::string tag_query = args.tag_query;
 
-    // // Check if path exists
-    // if (fs::exists(path)) {
-    //     if (fs::is_regular_file(path)) {
-    //         std::vector<std::string> paths;
-    //         paths.push_back(path);
-    //         GetAndStoreTags(paths,db_path);
-    //     } else if (fs::is_directory(path)) {
-    //         std::vector<std::string> paths = GetFilePaths(path, true);
-    //         GetAndStoreTags(paths,db_path);
-    //     } else {
-    //         std::cout << "Input path exists, but is not a file or directory" << std::endl;
-    //     }
-    // } else {
-    //     std::cout << "Input path does not exist" << std::endl;
-    // }
+    // Check if path exists
+    if (fs::exists(path)) {
+        if (fs::is_regular_file(path)) {
+            std::vector<std::string> paths;
+            paths.push_back(path);
+            GetAndStoreTags(paths,db_path);
+        } else if (fs::is_directory(path)) {
+            std::vector<std::string> paths = GetFilePaths(path, true);
+            GetAndStoreTags(paths,db_path);
+        } else {
+            std::cout << "Input path exists, but is not a file or directory" << std::endl;
+        }
+    } else {
+        std::cout << "Input path does not exist" << std::endl;
+    }
 
     // // Check if path exists
     // if (fs::is_regular_file(db_path)){
@@ -41,13 +40,13 @@ int main(int argc, const char *argv[]) {
     // }
 
     // Check if path exists
-    if (fs::exists(path)) {
-        if (fs::is_regular_file(path)) {
-            std::vector<std::string> tags;
-            tags.push_back(tag_query);
-            AddTagsToFile(path,tags);
-        }
-    }
+    // if (fs::exists(path)) {
+    //     if (fs::is_regular_file(path)) {
+    //         std::vector<std::string> tags;
+    //         tags.push_back(tag_query);
+    //         AddTagsToFile(path,tags);
+    //     }
+    // }
 
     return 0;
 }
