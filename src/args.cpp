@@ -28,7 +28,6 @@ Args::Args(int argc, const char **argv) {
         po::parsed_options main_parsed = po::command_line_parser(argc, argv).
             options(main_desc).
             positional(main_desc_p).
-            allow_unregistered().
             run();
 
         // Store options
@@ -59,7 +58,7 @@ Args::Args(int argc, const char **argv) {
             // Make options positional
             po::positional_options_description load_desc_p;
             load_desc_p.add("path", 1);
-            load_desc_p.add("db_path",2);
+            load_desc_p.add("db_path",1);
 
             // Collect all the unrecognized options from the first pass. This will include the
             // (positional) command name, so we need to erase that.
