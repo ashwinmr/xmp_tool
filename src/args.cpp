@@ -16,7 +16,7 @@ Args::Args(int argc, const char **argv) {
         po::options_description main_desc("main options:");
         main_desc.add_options()("help,h", "help message")
         ("sub_cmd", po::value<std::string>()->required(), "sub command to execute")
-        ("sub_args", po::value<std::string>(),"arguments for sub command")
+        ("sub_args", po::value<std::vector<std::string>>(),"arguments for sub command")
         ;
 
         // Make options positional
