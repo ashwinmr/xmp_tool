@@ -114,7 +114,8 @@ std::vector<std::string> Db::SelectTagQuery(std::string tag_query) {
         std::cout << "GenSql Exception: \n\t" << e.what() << std::endl;
     }
 
-    std::cout << sql << std::endl;
+    // Display the sql statement
+    // std::cout << sql << std::endl;
 
     // Execute sql
     char* err_msg = 0;
