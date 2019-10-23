@@ -28,6 +28,7 @@ Args::Args(int argc, const char **argv) {
         po::parsed_options main_parsed = po::command_line_parser(argc, argv).
             options(main_desc).
             positional(main_desc_p).
+            allow_unregistered(). // Allow dash options to be ignored
             run();
 
         // Store options
