@@ -13,16 +13,16 @@ Args::Args(int argc, const char **argv) {
         po::variables_map args;
 
         // Declare supported main options
-        po::options_description main_desc("main options:");
+        po::options_description main_desc("tool for modifying xmp data");
         main_desc.add_options()("help,h", "help message")
         ("sub_cmd", po::value<std::string>()->required(), "sub command to execute")
-        ("sub_args", po::value<std::vector<std::string>>(),"arguments for sub command")
+        ("sub_args", po::value<std::vector<std::string>>()->multitoken(),"arguments for sub command")
         ;
 
         // Make options positional
         po::positional_options_description main_desc_p;
         main_desc_p.add("sub_cmd", 1);
-        main_desc_p.add("sub_args", -1);
+        main_desc_p.add("sub_args", -1); // Multitoken is needed if this is not provided
 
         // Parse options
         po::parsed_options main_parsed = po::command_line_parser(argc, argv).
@@ -50,7 +50,7 @@ Args::Args(int argc, const char **argv) {
         if(sub_cmd == "load"){
 
             // load command has the following options:
-            po::options_description load_desc("load options");
+            po::options_description load_desc("load file tags into database");
             load_desc.add_options()
             ("help,h", "help message")
             ("path,p",po::value<std::string>()->required(), "path to file or directory")
@@ -95,7 +95,7 @@ Args::Args(int argc, const char **argv) {
         else if(sub_cmd == "get"){
 
             // get command has the following options:
-            po::options_description get_desc("get options");
+            po::options_description get_desc("get files based on tag query");
             get_desc.add_options()
             ("help,h", "help message")
             ("db_path,d",po::value<std::string>()->required(),"path to database")
@@ -139,10 +139,10 @@ Args::Args(int argc, const char **argv) {
         else if(sub_cmd == "add"){
 
             // add command has the following options:
-            po::options_description add_desc("add options");
+            po::options_description add_desc("add tags to files");
             add_desc.add_options()
             ("help,h", "help message")
-            ("file_paths,f",po::value<std::vector<std::string>>()->required(),"paths to files")
+            ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
             ("tags,t",po::value<std::vector<std::string>>()->multitoken(),"tags")
             ;
 
@@ -175,6 +175,52 @@ Args::Args(int argc, const char **argv) {
 
             // Store inputs
             this->file_paths = args["file_paths"].as<std::vector<std::string>>();
+            this->tags = args["tags"].as<std::vector<std::string>>();
+
+            // Parsing successful
+            this->valid = true;
+        }
+        else if(sub_cmd == "rem"){
+
+            // rem command has the following options:
+            po::options_description rem_desc("remove tags from files");
+            rem_desc.add_options()
+            ("help,h", "help message")
+            ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
+            ("all,a",po::bool_switch(),"remove all")
+            ("tags,t",po::value<std::vector<std::string>>()->multitoken(),"tags")
+            ;
+
+            // Make options positional
+            po::positional_options_description rem_desc_p;
+            rem_desc_p.add("file_paths",-1);
+
+            // Collect all the unrecognized options from the first pass. This will include the
+            // (positional) command name, so we need to erase that.
+            std::vector<std::string> opts = po::collect_unrecognized(main_parsed.options, po::include_positional);
+            opts.erase(opts.begin());
+
+            // Parse again...
+            po::parsed_options rem_parsed = po::command_line_parser(opts).
+                options(rem_desc).
+                positional(rem_desc_p).
+                run();
+
+            // Store options
+            po::store(rem_parsed, args);
+
+            // Handle help before checking for errors
+            if (args.count("help") || (opts.size() < 1)) {
+                std::cout << rem_desc << std::endl;
+                return;
+            }
+
+            // Check inputs for errors
+            po::notify(args);
+
+            // Store inputs
+            this->file_paths = args["file_paths"].as<std::vector<std::string>>();
+            this->remove_all = args["all"].as<bool>();
             this->tags = args["tags"].as<std::vector<std::string>>();
 
             // Parsing successful
