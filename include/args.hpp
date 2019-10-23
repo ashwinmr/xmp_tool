@@ -8,6 +8,8 @@ class Args {
     bool valid = false;
     std::string path;
     std::string db_path;
+    std::string tag_query;
+    std::string sub_cmd;
 
     /**
      * Constructor parses command line arguments

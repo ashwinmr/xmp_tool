@@ -45,6 +45,7 @@ Args::Args(int argc, const char **argv) {
 
         // Handle sub commands
         std::string sub_cmd = args["sub_cmd"].as<std::string>();
+        this->sub_cmd = sub_cmd;
 
         if(sub_cmd == "load"){
 
@@ -87,6 +88,50 @@ Args::Args(int argc, const char **argv) {
             // Store inputs
             this->path = args["path"].as<std::string>();
             this->db_path = args["db_path"].as<std::string>();
+
+            // Parsing successful
+            this->valid = true;
+        }
+        else if(sub_cmd == "get"){
+
+            // get command has the following options:
+            po::options_description get_desc("get options");
+            get_desc.add_options()
+            ("help,h", "help message")
+            ("db_path,d",po::value<std::string>()->required(),"path to database")
+            ("tag_query,t",po::value<std::string>()->default_value(""),"tag query")
+            ;
+
+            // Make options positional
+            po::positional_options_description get_desc_p;
+            get_desc_p.add("db_path",1);
+
+            // Collect all the unrecognized options from the first pass. This will include the
+            // (positional) command name, so we need to erase that.
+            std::vector<std::string> opts = po::collect_unrecognized(main_parsed.options, po::include_positional);
+            opts.erase(opts.begin());
+
+            // Parse again...
+            po::parsed_options get_parsed = po::command_line_parser(opts).
+                options(get_desc).
+                positional(get_desc_p).
+                run();
+
+            // Store options
+            po::store(get_parsed, args);
+
+            // Handle help before checking for errors
+            if (args.count("help") || (opts.size() < 1)) {
+                std::cout << get_desc << std::endl;
+                return;
+            }
+
+            // Check inputs for errors
+            po::notify(args);
+
+            // Store inputs
+            this->db_path = args["db_path"].as<std::string>();
+            this->tag_query = args["tag_query"].as<std::string>();
 
             // Parsing successful
             this->valid = true;

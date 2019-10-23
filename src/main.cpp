@@ -14,39 +14,42 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-    // Store args
-    std::string path = args.path;
-    std::string db_path = args.db_path;
+    // Perform subcommand
+    if(args.sub_cmd == "load"){
 
-    // Check if path exists
-    if (fs::exists(path)) {
-        if (fs::is_regular_file(path)) {
-            std::vector<std::string> paths;
-            paths.push_back(path);
-            GetAndStoreTags(paths,db_path);
-        } else if (fs::is_directory(path)) {
-            std::vector<std::string> paths = GetFilePaths(path, true);
-            GetAndStoreTags(paths,db_path);
+        // Store args
+        std::string path = args.path;
+        std::string db_path = args.db_path;
+
+        // Check if path exists
+        if (fs::exists(path)) {
+            if (fs::is_regular_file(path)) {
+                std::vector<std::string> paths;
+                paths.push_back(path);
+                GetAndStoreTags(paths,db_path);
+            } else if (fs::is_directory(path)) {
+                std::vector<std::string> paths = GetFilePaths(path, true);
+                GetAndStoreTags(paths,db_path);
+            } else {
+                std::cout << "Input path exists, but is not a file or directory" << std::endl;
+            }
         } else {
-            std::cout << "Input path exists, but is not a file or directory" << std::endl;
+            std::cout << "Input path does not exist" << std::endl;
         }
-    } else {
-        std::cout << "Input path does not exist" << std::endl;
     }
+    else if(args.sub_cmd == "get"){
+        // Store args
+        std::string db_path = args.db_path;
+        std::string tag_query = args.tag_query;
 
-    // // Check if path exists
-    // if (fs::is_regular_file(db_path)){
-    //     PrintPathsForTagQuery(db_path,tag_query);
-    // }
-
-    // Check if path exists
-    // if (fs::exists(path)) {
-    //     if (fs::is_regular_file(path)) {
-    //         std::vector<std::string> tags;
-    //         tags.push_back(tag_query);
-    //         AddTagsToFile(path,tags);
-    //     }
-    // }
+        // Check if path exists
+        if (fs::is_regular_file(db_path)){
+            PrintPathsForTagQuery(db_path,tag_query);
+        }
+        else{
+            std::cout << "Input path is not a file" << std::endl;
+        }
+    }
 
     return 0;
 }
