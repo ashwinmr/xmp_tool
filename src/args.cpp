@@ -143,7 +143,7 @@ Args::Args(int argc, const char **argv) {
             add_desc.add_options()
             ("help,h", "help message")
             ("file_paths,f",po::value<std::vector<std::string>>()->required(),"paths to files")
-            ("tags,t",po::value<std::vector<std::string>>(),"tags")
+            ("tags,t",po::value<std::vector<std::string>>()->multitoken(),"tags")
             ;
 
             // Make options positional

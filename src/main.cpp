@@ -50,6 +50,13 @@ int main(int argc, const char *argv[]) {
             std::cout << "Input path is not a file" << std::endl;
         }
     }
+    else if(args.sub_cmd == "add"){
+        // Store args
+        std::vector<std::string> file_paths = args.file_paths;
+        std::vector<std::string> tags = args.tags;
+
+        AddTagsToFiles(file_paths,tags);
+    }
 
     return 0;
 }
