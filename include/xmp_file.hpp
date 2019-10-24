@@ -34,6 +34,11 @@ class XmpFile{
      */
     SXMPMeta GetMeta();
 
+    /**
+     * Put xmp meta
+     */
+    bool PutMeta(SXMPMeta& meta);
+
     private:
     SXMPFiles xmp_file;
 

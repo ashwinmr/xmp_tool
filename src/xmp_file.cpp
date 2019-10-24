@@ -84,3 +84,15 @@ SXMPMeta XmpFile::GetMeta(){
     }
     return meta;
 }
+
+/**
+ * Put meta
+ */
+bool XmpFile::PutMeta(SXMPMeta& meta){
+    // Check we can put the XMP packet back into the file
+    if(this->valid && this->xmp_file.CanPutXMP(meta)){
+        this->xmp_file.PutXMP(meta);
+        return true;
+    }
+    return false;
+}
