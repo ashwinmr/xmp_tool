@@ -133,96 +133,43 @@ void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& t
 bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string> &tags, bool remove_all) {
     bool success = false;
 
-    if (!SXMPMeta::Initialize()) {
-        std::cout << "Could not initialize toolkit!";
-        return success;
-    }
+    XmpFile xmp_file(full_file_path, false, true);
 
-    XMP_OptionBits options = 0;
-#if UNIX_ENV
-    options |= kXMPFiles_ServerMode;
-#endif
+    if(xmp_file.valid){
+        // Create the xmp object and get the xmp data
+        SXMPMeta meta = xmp_file.GetMeta();
 
-    // Must initialize SXMPFiles before we use it
-    if (!SXMPFiles::Initialize(options)) {
-        std::cout << "Could not initialize SXMPFiles.";
-        return success;
-    }
+        // Now modify the XMP
 
-    try {
-        // Options to open the file with - open for editing and use a smart handler
-        XMP_OptionBits opts = kXMPFiles_OpenForUpdate | kXMPFiles_OpenUseSmartHandler;
+        int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+        int i = 1;
+        std::set<std::string> tag_set(tags.begin(),tags.end());
 
-        bool ok;
-        SXMPFiles myFile;
-        std::string status = "";
+        // Deleting a tag, changes the array size
+        while(i <= n_tags){
 
-        // First we try and open the file
-        ok = myFile.OpenFile(full_file_path, kXMP_UnknownFile, opts);
-        if (!ok) {
-            status += "No smart handler available for " + full_file_path + "\n";
-            status += "Trying packet scanning.\n";
-
-            // Now try using packet scanning
-            opts = kXMPFiles_OpenForUpdate | kXMPFiles_OpenUsePacketScanning;
-            ok = myFile.OpenFile(full_file_path, kXMP_UnknownFile, opts);
-        }
-
-        // If the file is open then read get the XMP data
-        if (ok) {
-            // Create the XMP object and get the XMP data
-            SXMPMeta meta;
-            myFile.GetXMP(&meta);
-
-            // Now modify the XMP
-
-            int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
-            int i = 1;
-            std::set<std::string> tag_set(tags.begin(),tags.end());
-
-            // Deleting a tag, changes the array size
-            while(i <= n_tags){
-
-                if(remove_all){
+            if(remove_all){
+                meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
+                n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+            }
+            else{
+                std::string tag;
+                meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
+                
+                if(tag_set.find(tag) != tag_set.end()){
                     meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
                     n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
                 }
                 else{
-                    std::string tag;
-                    meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
-                    
-                    if(tag_set.find(tag) != tag_set.end()){
-                        meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
-                        n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
-                    }
-                    else{
-                        i++;
-                    }
+                    i++;
                 }
             }
-
-            // Check we can put the XMP packet back into the file
-            if (myFile.CanPutXMP(meta)) {
-                // If so then update the file with the modified XMP
-                myFile.PutXMP(meta);
-
-                success = true;
-            }
-
-            // Close the SXMPFile.  This *must* be called.  The XMP is not
-            // actually written and the disk file is not closed until this call is made.
-            myFile.CloseFile();
-        } else {
-            std::cout << "Unable to open " << full_file_path << std::endl;
         }
-    } catch (XMP_Error &e) {
-        std::cout << "Error opening " + full_file_path + ":\n\t" << e.GetErrMsg() << std::endl;
+
+        if(xmp_file.PutMeta(meta)){
+            success = true;
+        }
     }
-
-    // Terminate the toolkit
-    SXMPFiles::Terminate();
-    SXMPMeta::Terminate();
-
     return success;
 }
 
