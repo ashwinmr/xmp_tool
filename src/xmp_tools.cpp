@@ -319,32 +319,30 @@ bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string> &ta
             myFile.GetXMP(&meta);
 
             // Now modify the XMP
-            int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
 
-            // Create tag set
+            int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+            int i = 1;
             std::set<std::string> tag_set(tags.begin(),tags.end());
 
-            // Create list of indexes to be removed
-            std::vector<int> rem_list;
+            // Deleting a tag, changes the array size
+            while(i <= n_tags){
 
-            // Get indexes for removal
-            for (int i = 1; i <= n_tags; i++) {
                 if(remove_all){
-                    rem_list.push_back(i);
+                    meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
+                    n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
                 }
                 else{
                     std::string tag;
                     meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
-
+                    
                     if(tag_set.find(tag) != tag_set.end()){
-                        rem_list.push_back(i);
+                        meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
+                        n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+                    }
+                    else{
+                        i++;
                     }
                 }
-            }
-
-            // Remove tags
-            for(auto& i: rem_list){
-                meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
             }
 
             // Check we can put the XMP packet back into the file
