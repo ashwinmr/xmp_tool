@@ -143,7 +143,7 @@ Args::Args(int argc, const char **argv) {
             add_desc.add_options()
             ("help,h", "help message")
             ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
-            ("tags,t",po::value<std::vector<std::string>>()->multitoken(),"tags")
+            ("tags,t",po::value<std::vector<std::string>>()->multitoken()->default_value(std::vector<std::string>{""},""),"tags") //Vector default values require << for ostream
             ;
 
             // Make options positional
@@ -188,7 +188,7 @@ Args::Args(int argc, const char **argv) {
             ("help,h", "help message")
             ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
             ("all,a",po::bool_switch(),"remove all")
-            ("tags,t",po::value<std::vector<std::string>>()->multitoken(),"tags")
+            ("tags,t",po::value<std::vector<std::string>>()->multitoken()->default_value(std::vector<std::string>{""},""),"tags") //Vector default values require << for ostream
             ;
 
             // Make options positional
