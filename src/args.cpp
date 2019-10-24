@@ -226,6 +226,48 @@ Args::Args(int argc, const char **argv) {
             // Parsing successful
             this->valid = true;
         }
+        else if(sub_cmd == "read"){
+
+            // read command has the following options:
+            po::options_description read_desc("read xmp data from files");
+            read_desc.add_options()
+            ("help,h", "help message")
+            ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
+            ;
+
+            // Make options positional
+            po::positional_options_description read_desc_p;
+            read_desc_p.add("file_paths",-1);
+
+            // Collect all the unrecognized options from the first pass. This will include the
+            // (positional) command name, so we need to erase that.
+            std::vector<std::string> opts = po::collect_unrecognized(main_parsed.options, po::include_positional);
+            opts.erase(opts.begin());
+
+            // Parse again...
+            po::parsed_options read_parsed = po::command_line_parser(opts).
+                options(read_desc).
+                positional(read_desc_p).
+                run();
+
+            // Store options
+            po::store(read_parsed, args);
+
+            // Handle help before checking for errors
+            if (args.count("help") || (opts.size() < 1)) {
+                std::cout << read_desc << std::endl;
+                return;
+            }
+
+            // Check inputs for errors
+            po::notify(args);
+
+            // Store inputs
+            this->file_paths = args["file_paths"].as<std::vector<std::string>>();
+
+            // Parsing successful
+            this->valid = true;
+        }
         else{
             std::cout << "Invalid sub command" << std::endl;
         }

@@ -90,6 +90,89 @@ std::vector<std::string> GetTagsFromFile(std::string full_file_path) {
 }
 
 /**
+ * Dump xmp to stream callback
+ */
+XMP_Status DumpXmpToConsole(void * not_used, XMP_StringPtr buffer, XMP_StringLen bufferSize)
+{
+	XMP_Status status = 0;
+	
+	try
+	{
+        std::cout << buffer;
+	}
+	catch(XMP_Error & e)
+	{
+        std::cout << "Error reading xmp data:\n\t" << e.GetErrMsg() << std::endl;
+		return -1;  // Return a bad status
+	}
+
+	return status;
+}
+
+/**
+ * Read xmp data from file
+ */
+void ReadXmpFromFile(std::string full_file_path) {
+
+    if (!SXMPMeta::Initialize()) {
+        std::cout << "Could not initialize toolkit!";
+        return;
+    }
+    XMP_OptionBits options = 0;
+#if UNIX_ENV
+    options |= kXMPFiles_ServerMode;
+#endif
+    // Must initialize SXMPFiles before we use it
+    if (!SXMPFiles::Initialize(options)) {
+        std::cout << "Could not initialize SXMPFiles.";
+        return;
+    }
+
+    try {
+        // Options to open the file with - read only and use a file handler
+        XMP_OptionBits opts = kXMPFiles_OpenForRead | kXMPFiles_OpenUseSmartHandler;
+
+        bool ok;
+        SXMPFiles myFile;
+        std::string status = "";
+
+        // First we try and open the file
+        ok = myFile.OpenFile(full_file_path, kXMP_UnknownFile, opts);
+        if (!ok) {
+            status += "No smart handler available for " + full_file_path + "\n";
+            status += "Trying packet scanning.\n";
+
+            // Now try using packet scanning
+            opts = kXMPFiles_OpenForUpdate | kXMPFiles_OpenUsePacketScanning;
+            ok = myFile.OpenFile(full_file_path, kXMP_UnknownFile, opts);
+        }
+
+        // If the file is open then read the metadata
+        if (ok) {
+            // Create the xmp object and get the xmp data
+            SXMPMeta meta;
+            myFile.GetXMP(&meta);
+
+            meta.DumpObject(DumpXmpToConsole, NULL);
+
+            // Close the SXMPFile.  The resource file is already closed if it was
+            // opened as read only but this call must still be made.
+            myFile.CloseFile();
+        } else {
+            std::cout << "Unable to open " << full_file_path << std::endl;
+        }
+    } catch (XMP_Error &e) {
+        std::cout << "Error opening " + full_file_path + ":\n\t" << e.GetErrMsg() << std::endl;
+    }
+
+    // Terminate the toolkit
+    SXMPFiles::Terminate();
+    SXMPMeta::Terminate();
+
+    return;
+}
+
+/**
  * Add tags to file
  */
 bool AddTagsToFile(std::string full_file_path, std::vector<std::string> &tags) {

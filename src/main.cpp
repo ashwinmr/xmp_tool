@@ -65,6 +65,15 @@ int main(int argc, const char *argv[]) {
 
         RemoveTagsFromFiles(file_paths,tags,remove_all);
     }
+    else if(args.sub_cmd == "read"){
+        // Store args
+        std::vector<std::string> file_paths = args.file_paths;
+
+        for(auto &file_path: file_paths){
+            ReadXmpFromFile(file_path);
+            std::cout << std::endl;
+        }
+    }
 
     return 0;
 }

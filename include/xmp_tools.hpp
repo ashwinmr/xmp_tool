@@ -9,6 +9,11 @@
 std::vector<std::string> GetTagsFromFile(std::string full_file_path);
 
 /**
+ * Get tags from a file
+ */
+void ReadXmpFromFile(std::string full_file_path);
+
+/**
  * Add tags to file
  */
 bool AddTagsToFile(std::string full_file_path, std::vector<std::string>& tags);
