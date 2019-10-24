@@ -17,6 +17,9 @@
 // Provide access to the API
 #include "XMP.hpp"
 
+// Forward declarations
+XMP_Status DumpXmpToConsole(void * not_used, XMP_StringPtr buffer, XMP_StringLen bufferSize);
+
 namespace fs = boost::filesystem;
 
 /**
