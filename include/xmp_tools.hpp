@@ -19,6 +19,16 @@ bool AddTagsToFile(std::string full_file_path, std::vector<std::string>& tags);
 void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& tags);
 
 /**
+ * Remove tags from file
+ */
+bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string>& tags, bool remove_all);
+
+/**
+ * Remove tags from files
+ */
+void RemoveTagsFromFiles(std::vector<std::string>& paths, std::vector<std::string>& tags, bool remove_all);
+
+/**
  * Get all file paths within a directory
  */
 std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse);

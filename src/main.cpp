@@ -57,6 +57,14 @@ int main(int argc, const char *argv[]) {
 
         AddTagsToFiles(file_paths,tags);
     }
+    else if(args.sub_cmd == "rem"){
+        // Store args
+        std::vector<std::string> file_paths = args.file_paths;
+        std::vector<std::string> tags = args.tags;
+        bool remove_all = args.remove_all;
+
+        RemoveTagsFromFiles(file_paths,tags,remove_all);
+    }
 
     return 0;
 }
