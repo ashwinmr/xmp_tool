@@ -87,7 +87,7 @@ void ReadXmpFromFile(std::string full_file_path) {
 /**
  * Add tags to file
  */
-bool AddTagsToFile(std::string full_file_path, std::vector<std::string> &tags) {
+bool AddTagsToFile(std::string full_file_path, std::set<std::string> &tags) {
     bool success = false;
 
     // If not tags provided return success
@@ -101,10 +101,22 @@ bool AddTagsToFile(std::string full_file_path, std::vector<std::string> &tags) {
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
         SXMPMeta meta = xmp_file.GetMeta();
+        
+        // Determine existing tags
+        int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+        std::set<std::string> tags_existing;
+        for (int i = 1; i <= n_tags; i++) {
+            std::string tag;
+            meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
+            tags_existing.insert(tag);
+        }
 
+        // Add tags that don't exist
         for (auto &tag : tags) {
-            // Note the options used, kXMP_PropArrayIsOrdered, if the array does not exist it will be created
-            meta.AppendArrayItem(kXMP_NS_DC, "subject", kXMP_PropArrayIsOrdered, tag, 0);
+            if(tags_existing.find(tag) == tags_existing.end()){
+                // Note the options used, kXMP_PropArrayIsOrdered, if the array does not exist it will be created
+                meta.AppendArrayItem(kXMP_NS_DC, "subject", kXMP_PropArrayIsOrdered, tag, 0);
+            }
         }
 
         if(xmp_file.PutMeta(meta)){
@@ -118,7 +130,7 @@ bool AddTagsToFile(std::string full_file_path, std::vector<std::string> &tags) {
 /**
  * Add tags to files
  */
-void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& tags){
+void AddTagsToFiles(std::vector<std::string>& paths, std::set<std::string>& tags){
 
     for(auto& path: paths){
         if(!AddTagsToFile(path,tags)){
@@ -130,7 +142,7 @@ void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& t
 /**
  * Remove tags from file
  */
-bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string> &tags, bool remove_all) {
+bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string> &tags, bool remove_all) {
     bool success = false;
 
     XmpFile xmp_file(full_file_path, false, true);
@@ -143,7 +155,6 @@ bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string> &ta
 
         int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
         int i = 1;
-        std::set<std::string> tag_set(tags.begin(),tags.end());
 
         // Deleting a tag, changes the array size
         while(i <= n_tags){
@@ -156,7 +167,7 @@ bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string> &ta
                 std::string tag;
                 meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
                 
-                if(tag_set.find(tag) != tag_set.end()){
+                if(tags.find(tag) != tags.end()){
                     meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
                     n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
                 }
@@ -176,7 +187,7 @@ bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string> &ta
 /**
  * Remove tags from files
  */
-void RemoveTagsFromFiles(std::vector<std::string>& paths, std::vector<std::string>& tags, bool remove_all){
+void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>& tags, bool remove_all){
 
     for(auto& path: paths){
         if(!RemoveTagsFromFile(path,tags,remove_all)){

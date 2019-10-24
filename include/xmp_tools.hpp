@@ -2,6 +2,7 @@
 #define XMP_TOOLS_H_
 
 #include <vector>
+#include <set>
 
 /**
  * Get tags from a file
@@ -16,22 +17,22 @@ void ReadXmpFromFile(std::string full_file_path);
 /**
  * Add tags to file
  */
-bool AddTagsToFile(std::string full_file_path, std::vector<std::string>& tags);
+bool AddTagsToFile(std::string full_file_path, std::set<std::string>& tags);
 
 /**
  * Add tags to files
  */
-void AddTagsToFiles(std::vector<std::string>& paths, std::vector<std::string>& tags);
+void AddTagsToFiles(std::vector<std::string>& paths, std::set<std::string>& tags);
 
 /**
  * Remove tags from file
  */
-bool RemoveTagsFromFile(std::string full_file_path, std::vector<std::string>& tags, bool remove_all);
+bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string>& tags, bool remove_all);
 
 /**
  * Remove tags from files
  */
-void RemoveTagsFromFiles(std::vector<std::string>& paths, std::vector<std::string>& tags, bool remove_all);
+void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>& tags, bool remove_all);
 
 /**
  * Get all file paths within a directory

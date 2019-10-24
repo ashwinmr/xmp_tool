@@ -3,6 +3,7 @@
 #include "xmp_tools.hpp"
 #include <boost/filesystem.hpp>
 #include <iostream>
+#include <set>
 
 namespace fs = boost::filesystem;
 
@@ -53,14 +54,14 @@ int main(int argc, const char *argv[]) {
     else if(args.sub_cmd == "add"){
         // Store args
         std::vector<std::string> file_paths = args.file_paths;
-        std::vector<std::string> tags = args.tags;
+        std::set<std::string> tags(args.tags.begin(), args.tags.end());
 
         AddTagsToFiles(file_paths,tags);
     }
     else if(args.sub_cmd == "rem"){
         // Store args
         std::vector<std::string> file_paths = args.file_paths;
-        std::vector<std::string> tags = args.tags;
+        std::set<std::string> tags(args.tags.begin(), args.tags.end());
         bool remove_all = args.remove_all;
 
         RemoveTagsFromFiles(file_paths,tags,remove_all);
