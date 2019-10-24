@@ -29,7 +29,7 @@ namespace fs = boost::filesystem;
 std::vector<std::string> GetTagsFromFile(std::string full_file_path) {
     std::vector<std::string> tags;
 
-    XmpFile xmp_file(full_file_path);
+    XmpFile xmp_file(full_file_path, true, false);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
@@ -72,7 +72,7 @@ XMP_Status DumpXmpToConsole(void * not_used, XMP_StringPtr buffer, XMP_StringLen
  */
 void ReadXmpFromFile(std::string full_file_path) {
 
-    XmpFile xmp_file(full_file_path);
+    XmpFile xmp_file(full_file_path, true, false);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data

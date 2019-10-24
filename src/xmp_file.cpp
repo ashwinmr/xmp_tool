@@ -4,7 +4,7 @@
 /**
  * Constructor initializes an Xmp file
  */
-XmpFile::XmpFile(std::string full_file_path){
+XmpFile::XmpFile(std::string full_file_path, bool read, bool write){
 
     if (!SXMPMeta::Initialize()) {
         std::cout << "Could not initialize toolkit!";
@@ -21,8 +21,14 @@ XmpFile::XmpFile(std::string full_file_path){
     }
 
     try {
-        // Options to open the file with - read only and use a file handler
-        XMP_OptionBits opts = kXMPFiles_OpenForRead | kXMPFiles_OpenUseSmartHandler;
+        // Options to open the file with
+        XMP_OptionBits opts = kXMPFiles_OpenUseSmartHandler;
+        if(read){
+            opts |= kXMPFiles_OpenForRead;
+        }
+        if(write){
+            opts |= kXMPFiles_OpenForUpdate;
+        }
 
         bool ok;
         std::string status = "";
