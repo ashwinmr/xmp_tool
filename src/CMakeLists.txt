@@ -8,6 +8,7 @@ include_directories(../include ./libs/XMP/include ./libs/sqlite3/include ${Boost
 # Turn main souce code into a library
 add_library(src 
 xmp_tools.cpp 
+xmp_file.cpp
 args.cpp 
 db_tools.cpp)
 
