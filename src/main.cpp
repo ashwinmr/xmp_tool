@@ -37,7 +37,7 @@ int main(int argc, const char *argv[]) {
             std::cout << "Input path does not exist" << std::endl;
         }
     }
-    else if(args.sub_cmd == "get"){
+    else if(args.sub_cmd == "query"){
         // Store args
         std::string db_path = args.db_path;
         std::string tag_query = args.tag_query;

@@ -92,19 +92,19 @@ Args::Args(int argc, const char **argv) {
             // Parsing successful
             this->valid = true;
         }
-        else if(sub_cmd == "get"){
+        else if(sub_cmd == "query"){
 
-            // get command has the following options:
-            po::options_description get_desc("get files based on tag query");
-            get_desc.add_options()
+            // query command has the following options:
+            po::options_description query_desc("find files based on tag query");
+            query_desc.add_options()
             ("help,h", "help message")
             ("db_path,d",po::value<std::string>()->required(),"path to database")
             ("tag_query,t",po::value<std::string>()->default_value(""),"tag query")
             ;
 
             // Make options positional
-            po::positional_options_description get_desc_p;
-            get_desc_p.add("db_path",1);
+            po::positional_options_description query_desc_p;
+            query_desc_p.add("db_path",1);
 
             // Collect all the unrecognized options from the first pass. This will include the
             // (positional) command name, so we need to erase that.
@@ -112,17 +112,17 @@ Args::Args(int argc, const char **argv) {
             opts.erase(opts.begin());
 
             // Parse again...
-            po::parsed_options get_parsed = po::command_line_parser(opts).
-                options(get_desc).
-                positional(get_desc_p).
+            po::parsed_options query_parsed = po::command_line_parser(opts).
+                options(query_desc).
+                positional(query_desc_p).
                 run();
 
             // Store options
-            po::store(get_parsed, args);
+            po::store(query_parsed, args);
 
             // Handle help before checking for errors
             if (args.count("help") || (opts.size() < 1)) {
-                std::cout << get_desc << std::endl;
+                std::cout << query_desc << std::endl;
                 return;
             }
 
