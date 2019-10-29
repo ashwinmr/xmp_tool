@@ -30,14 +30,29 @@ void AddTagsToFiles(std::vector<std::string>& paths, std::set<std::string>& tags
 bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string>& tags);
 
 /**
+ * Remove tags from files
+ */
+void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>& tags);
+
+/**
  * Remove all tags from file
  */
 bool RemoveAllTagsFromFile(std::string full_file_path);
 
 /**
- * Remove tags from files
+ * Remove all tags from files
  */
-void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>& tags, bool remove_all);
+void RemoveAllTagsFromFiles(std::vector<std::string>& paths);
+
+/**
+ * Remove duplicate tags from file
+ */
+bool RemoveDuplicateTagsFromFile(std::string full_file_path);
+
+/**
+ * Remove duplicate tags from files
+ */
+void RemoveDuplicateTagsFromFiles(std::vector<std::string>& paths);
 
 /**
  * Get all file paths within a directory

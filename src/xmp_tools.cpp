@@ -208,13 +208,77 @@ bool RemoveAllTagsFromFile(std::string full_file_path) {
 }
 
 /**
+ * Remove duplicate tags from file
+ */
+bool RemoveDuplicateTagsFromFile(std::string full_file_path) {
+    bool success = false;
+
+    XmpFile xmp_file(full_file_path, false, true);
+
+    if(xmp_file.valid){
+        // Create the xmp object and get the xmp data
+        SXMPMeta meta = xmp_file.GetMeta();
+
+        // Now modify the XMP
+
+        int n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+        int i = 1;
+        std::set<std::string> tags;
+
+        // Deleting a tag, changes the array size
+        while(i <= n_tags){
+            std::string tag;
+            meta.GetArrayItem(kXMP_NS_DC, "subject", i, &tag, 0);
+            
+            if(tags.find(tag) != tags.end()){
+                meta.DeleteArrayItem(kXMP_NS_DC, "subject", i);
+                n_tags = meta.CountArrayItems(kXMP_NS_DC, "subject");
+            }
+            else{
+                tags.insert(tag);
+                i++;
+            }
+        }
+
+        if(xmp_file.PutMeta(meta)){
+            success = true;
+        }
+    }
+    return success;
+}
+
+/**
  * Remove tags from files
  */
-void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>& tags, bool remove_all){
+void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>& tags){
 
     for(auto& path: paths){
         if(!RemoveTagsFromFile(path,tags)){
             std::cout << "Warning: Failed to remove tags from " << path << std::endl;
+        } 
+    }
+}
+
+/**
+ * Remove all tags from files
+ */
+void RemoveAllTagsFromFiles(std::vector<std::string>& paths){
+
+    for(auto& path: paths){
+        if(!RemoveAllTagsFromFile(path)){
+            std::cout << "Warning: Failed to remove all tags from " << path << std::endl;
+        } 
+    }
+}
+
+/**
+ * Remove duplicate tags from files
+ */
+void RemoveDuplicateTagsFromFiles(std::vector<std::string>& paths){
+
+    for(auto& path: paths){
+        if(!RemoveDuplicateTagsFromFile(path)){
+            std::cout << "Warning: Failed to remove duplicate tags from " << path << std::endl;
         } 
     }
 }

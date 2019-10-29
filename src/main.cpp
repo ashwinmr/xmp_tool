@@ -63,8 +63,17 @@ int main(int argc, const char *argv[]) {
         std::vector<std::string> file_paths = args.file_paths;
         std::set<std::string> tags(args.tags.begin(), args.tags.end());
         bool remove_all = args.remove_all;
+        bool remove_duplicates = args.remove_duplicates;
 
-        RemoveTagsFromFiles(file_paths,tags,remove_all);
+        if(remove_all){
+            RemoveAllTagsFromFiles(file_paths);
+        }
+        else if(remove_duplicates){
+            RemoveDuplicateTagsFromFiles(file_paths);
+        }
+        else{
+            RemoveTagsFromFiles(file_paths,tags);
+        }
     }
     else if(args.sub_cmd == "read"){
         // Store args

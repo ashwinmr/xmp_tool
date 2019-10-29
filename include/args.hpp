@@ -8,6 +8,7 @@ class Args {
    public:
     bool valid = false;
     bool remove_all = false;
+    bool remove_duplicates = false;
     std::string path;
     std::string db_path;
     std::string tag_query;
