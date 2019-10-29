@@ -105,6 +105,7 @@ Args::Args(int argc, const char **argv) {
             // Make options positional
             po::positional_options_description query_desc_p;
             query_desc_p.add("db_path",1);
+            query_desc_p.add("tag_query",1);
 
             // Collect all the unrecognized options from the first pass. This will include the
             // (positional) command name, so we need to erase that.
