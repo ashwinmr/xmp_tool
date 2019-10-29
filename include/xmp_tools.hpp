@@ -27,7 +27,12 @@ void AddTagsToFiles(std::vector<std::string>& paths, std::set<std::string>& tags
 /**
  * Remove tags from file
  */
-bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string>& tags, bool remove_all);
+bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string>& tags);
+
+/**
+ * Remove all tags from file
+ */
+bool RemoveAllTagsFromFile(std::string full_file_path);
 
 /**
  * Remove tags from files
