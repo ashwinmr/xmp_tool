@@ -84,6 +84,18 @@ int main(int argc, const char *argv[]) {
             std::cout << std::endl;
         }
     }
+    else if(args.sub_cmd == "get"){
+        // Store args
+        std::vector<std::string> file_paths = args.file_paths;
+
+        for(auto &file_path: file_paths){
+            std::vector<std::string>tags = GetTagsFromFile(file_path);
+            for(auto& tag: tags){
+                std::cout << tag << std::endl;
+            }
+            std::cout << std::endl;
+        }
+    }
 
     return 0;
 }

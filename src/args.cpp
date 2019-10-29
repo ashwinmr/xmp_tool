@@ -271,10 +271,51 @@ Args::Args(int argc, const char **argv) {
             // Parsing successful
             this->valid = true;
         }
+        else if(sub_cmd == "get"){
+
+            // get command has the following options:
+            po::options_description get_desc("get tags from files");
+            get_desc.add_options()
+            ("help,h", "help message")
+            ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
+            ;
+
+            // Make options positional
+            po::positional_options_description get_desc_p;
+            get_desc_p.add("file_paths",-1);
+
+            // Collect all the unrecognized options from the first pass. This will include the
+            // (positional) command name, so we need to erase that.
+            std::vector<std::string> opts = po::collect_unrecognized(main_parsed.options, po::include_positional);
+            opts.erase(opts.begin());
+
+            // Parse again...
+            po::parsed_options get_parsed = po::command_line_parser(opts).
+                options(get_desc).
+                positional(get_desc_p).
+                run();
+
+            // Store options
+            po::store(get_parsed, args);
+
+            // Handle help before checking for errors
+            if (args.count("help") || (opts.size() < 1)) {
+                std::cout << get_desc << std::endl;
+                return;
+            }
+
+            // Check inputs for errors
+            po::notify(args);
+
+            // Store inputs
+            this->file_paths = args["file_paths"].as<std::vector<std::string>>();
+
+            // Parsing successful
+            this->valid = true;
+        }
         else{
             std::cout << "Invalid sub command" << std::endl;
         }
-
         return;
     } catch (po::error &e) {
         std::cout << "Error: " << e.what() << std::endl;
