@@ -6,7 +6,20 @@
         {
             "label": "build_windows",
             "type": "shell",
-            "command": "mkdir -p build && cd '${workspaceFolder}/build' && cmake .. -A Win32 && cmake --build .",
+            "command": "mkdir -p build && cd '${workspaceFolder}/build' && cmake .. -DCMAKE_INSTALL_PREFIX=C:/my_tools -A Win32 && cmake --build .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "showReuseMessage": false,
+           }
+        },
+        {
+            "label": "install_windows",
+            "type": "shell",
+            "command": "cd '${workspaceFolder}/build' && cmake --build . --target install",
             "group": {
                 "kind": "build",
                 "isDefault": true
