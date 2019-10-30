@@ -360,6 +360,17 @@ void PrintPathsForTagQuery(std::string db_path, std::string tag_query) {
 
     // Print paths
     for (auto &path : paths) {
-        std::cout << path << std::endl;
+
+        // Escape spaces before printing
+        std::string path_esc = "";
+        for(auto &ch: path){
+            if(ch != ' '){
+                path_esc += ch;
+            }
+            else{
+                path_esc += "\\ ";
+            }
+        }
+        std::cout << path_esc << std::endl;
     }
 }
