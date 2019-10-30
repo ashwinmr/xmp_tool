@@ -25,7 +25,7 @@ add_executable( xmp_tools ./src/main.cpp )
 target_link_libraries( xmp_tools src ${Boost_LIBRARIES})
 
 # Install
-install(TARGETS xmp_tools DESTINATION bin)
+install(TARGETS xmp_tools DESTINATION .) # This is relative to cmake install prefix or -DCMAKE_INSTALL_PREFIX
 
 # Testing
 enable_testing()
