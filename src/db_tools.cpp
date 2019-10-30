@@ -17,6 +17,10 @@ Db::Db(std::string db_path) {
     int ec;
 
     if (!db_path.empty()) {
+
+        // Ensure db path has extension
+        db_path = fs::path(db_path).replace_extension(".db").string();
+
         ec = sqlite3_open(db_path.c_str(), &dbc);
     } else {
         // Create table in memory
