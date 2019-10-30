@@ -22,6 +22,12 @@ int main(int argc, const char *argv[]) {
         std::string path = args.path;
         std::string db_path = args.db_path;
 
+        // Check if db path is a directory
+        if(fs::is_directory(db_path)){
+            std:: cout << "Input db path is a directory" << std::endl;
+            return 0;
+        }
+
         // Check if path exists
         if (fs::exists(path)) {
             if (fs::is_regular_file(path)) {
