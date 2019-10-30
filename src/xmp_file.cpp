@@ -1,10 +1,16 @@
 #include "xmp_file.hpp"
+#include <boost/filesystem.hpp>
 #include <iostream>
+
+namespace fs = boost::filesystem;
 
 /**
  * Constructor initializes an Xmp file
  */
-XmpFile::XmpFile(std::string full_file_path, bool read, bool write){
+XmpFile::XmpFile(std::string file_path, bool read, bool write){
+
+    // Convert to absolute file path
+    std::string abs_file_path = fs::canonical(file_path).string();
 
     if (!SXMPMeta::Initialize()) {
         std::cout << "Could not initialize toolkit!";
@@ -34,24 +40,24 @@ XmpFile::XmpFile(std::string full_file_path, bool read, bool write){
         std::string status = "";
 
         // First we try and open the file
-        ok = this->xmp_file.OpenFile(full_file_path, kXMP_UnknownFile, opts);
+        ok = this->xmp_file.OpenFile(abs_file_path, kXMP_UnknownFile, opts);
         if (!ok) {
-            status += "No smart handler available for " + full_file_path + "\n";
+            status += "No smart handler available for " + abs_file_path + "\n";
             status += "Trying packet scanning.\n";
 
             // Now try using packet scanning
             opts = kXMPFiles_OpenForUpdate | kXMPFiles_OpenUsePacketScanning;
-            ok = this->xmp_file.OpenFile(full_file_path, kXMP_UnknownFile, opts);
+            ok = this->xmp_file.OpenFile(abs_file_path, kXMP_UnknownFile, opts);
         }
 
         // If the file is open then read the metadata
         if (ok) {
             this->valid = true;
         } else {
-            std::cout << "Unable to open " << full_file_path << std::endl;
+            std::cout << "Unable to open " << abs_file_path << std::endl;
         }
     } catch (XMP_Error &e) {
-        std::cout << "Error opening " + full_file_path + ":\n\t" << e.GetErrMsg() << std::endl;
+        std::cout << "Error opening " + abs_file_path + ":\n\t" << e.GetErrMsg() << std::endl;
     }
     
     return;

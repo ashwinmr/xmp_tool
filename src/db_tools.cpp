@@ -91,8 +91,12 @@ bool Db::IsOpen(){
  * Insert a row into the table of the database
  */
 void Db::InsertRow(std::string path, std::string tag) {
+
+    // Convert to absolute path
+    std::string abs_path = fs::canonical(path).string();
+
     // Create sql statement
-    std::string sql = "insert into file_tags values(\"" + path + "\",\"" + tag + "\");";
+    std::string sql = "insert into file_tags values(\"" + abs_path + "\",\"" + tag + "\");";
 
     // Execute sql
     this->ExecSqlNoCallback(sql);

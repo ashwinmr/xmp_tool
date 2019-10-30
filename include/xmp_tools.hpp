@@ -7,17 +7,17 @@
 /**
  * Get tags from a file
  */
-std::vector<std::string> GetTagsFromFile(std::string full_file_path);
+std::vector<std::string> GetTagsFromFile(std::string file_path);
 
 /**
  * Get tags from a file
  */
-void ReadXmpFromFile(std::string full_file_path);
+void ReadXmpFromFile(std::string file_path);
 
 /**
  * Add tags to file
  */
-bool AddTagsToFile(std::string full_file_path, std::set<std::string>& tags);
+bool AddTagsToFile(std::string file_path, std::set<std::string>& tags);
 
 /**
  * Add tags to files
@@ -27,7 +27,7 @@ void AddTagsToFiles(std::vector<std::string>& paths, std::set<std::string>& tags
 /**
  * Remove tags from file
  */
-bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string>& tags);
+bool RemoveTagsFromFile(std::string file_path, std::set<std::string>& tags);
 
 /**
  * Remove tags from files
@@ -37,7 +37,7 @@ void RemoveTagsFromFiles(std::vector<std::string>& paths, std::set<std::string>&
 /**
  * Remove all tags from file
  */
-bool RemoveAllTagsFromFile(std::string full_file_path);
+bool RemoveAllTagsFromFile(std::string file_path);
 
 /**
  * Remove all tags from files
@@ -47,7 +47,7 @@ void RemoveAllTagsFromFiles(std::vector<std::string>& paths);
 /**
  * Remove duplicate tags from file
  */
-bool RemoveDuplicateTagsFromFile(std::string full_file_path);
+bool RemoveDuplicateTagsFromFile(std::string file_path);
 
 /**
  * Remove duplicate tags from files

@@ -26,10 +26,10 @@ namespace fs = boost::filesystem;
 /**
  * Get tags from a file
  */
-std::vector<std::string> GetTagsFromFile(std::string full_file_path) {
+std::vector<std::string> GetTagsFromFile(std::string file_path) {
     std::vector<std::string> tags;
 
-    XmpFile xmp_file(full_file_path, true, false);
+    XmpFile xmp_file(file_path, true, false);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
@@ -70,9 +70,9 @@ XMP_Status DumpXmpToConsole(void * not_used, XMP_StringPtr buffer, XMP_StringLen
 /**
  * Read xmp data from file
  */
-void ReadXmpFromFile(std::string full_file_path) {
+void ReadXmpFromFile(std::string file_path) {
 
-    XmpFile xmp_file(full_file_path, true, false);
+    XmpFile xmp_file(file_path, true, false);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
@@ -87,7 +87,7 @@ void ReadXmpFromFile(std::string full_file_path) {
 /**
  * Add tags to file
  */
-bool AddTagsToFile(std::string full_file_path, std::set<std::string> &tags) {
+bool AddTagsToFile(std::string file_path, std::set<std::string> &tags) {
     bool success = false;
 
     // If not tags provided return success
@@ -96,7 +96,7 @@ bool AddTagsToFile(std::string full_file_path, std::set<std::string> &tags) {
         return success;
     }
 
-    XmpFile xmp_file(full_file_path, false, true);
+    XmpFile xmp_file(file_path, false, true);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
@@ -142,10 +142,10 @@ void AddTagsToFiles(std::vector<std::string>& paths, std::set<std::string>& tags
 /**
  * Remove tags from file
  */
-bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string> &tags) {
+bool RemoveTagsFromFile(std::string file_path, std::set<std::string> &tags) {
     bool success = false;
 
-    XmpFile xmp_file(full_file_path, false, true);
+    XmpFile xmp_file(file_path, false, true);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
@@ -180,10 +180,10 @@ bool RemoveTagsFromFile(std::string full_file_path, std::set<std::string> &tags)
 /**
  * Remove all tags from file
  */
-bool RemoveAllTagsFromFile(std::string full_file_path) {
+bool RemoveAllTagsFromFile(std::string file_path) {
     bool success = false;
 
-    XmpFile xmp_file(full_file_path, false, true);
+    XmpFile xmp_file(file_path, false, true);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data
@@ -210,10 +210,10 @@ bool RemoveAllTagsFromFile(std::string full_file_path) {
 /**
  * Remove duplicate tags from file
  */
-bool RemoveDuplicateTagsFromFile(std::string full_file_path) {
+bool RemoveDuplicateTagsFromFile(std::string file_path) {
     bool success = false;
 
-    XmpFile xmp_file(full_file_path, false, true);
+    XmpFile xmp_file(file_path, false, true);
 
     if(xmp_file.valid){
         // Create the xmp object and get the xmp data

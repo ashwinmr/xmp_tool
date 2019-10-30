@@ -22,7 +22,7 @@ class XmpFile{
     /**
      * Constructor initializes an Xmp file
      */
-    XmpFile(std::string full_file_path, bool read, bool write);
+    XmpFile(std::string file_path, bool read, bool write);
 
     /**
      * Destructor closes the Xmp file
