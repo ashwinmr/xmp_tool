@@ -9,6 +9,7 @@ class Args {
     bool valid = false;
     bool remove_all = false;
     bool remove_duplicates = false;
+    bool force_create = false;
     std::string path;
     std::string db_path;
     std::string tag_query;

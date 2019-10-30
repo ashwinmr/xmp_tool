@@ -316,11 +316,6 @@ std::vector<std::string> GetFilePaths(std::string dir_path, bool recurse) {
  * Get and store tags for all paths in a vector into a database
  */
 void GetAndStoreTags(std::vector<std::string>& paths, std::string db_path) {
-    // Check if database already exists
-    if (fs::is_regular_file(db_path)) {
-        std::cout << "Database already exists" << std::endl;
-        return;
-    }
 
     // Create and open database
     Db db(db_path);

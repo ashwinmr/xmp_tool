@@ -21,11 +21,28 @@ int main(int argc, const char *argv[]) {
         // Store args
         std::string path = args.path;
         std::string db_path = args.db_path;
+        bool force_create = args.force_create;
 
         // Check if db path is a directory
         if(fs::is_directory(db_path)){
             std:: cout << "Input db path is a directory" << std::endl;
             return 0;
+        }
+
+        // Add extension if db path doesnt have one
+        if(!fs::path(db_path).has_extension()){
+            db_path = fs::path(db_path).replace_extension(".db").string();
+        }
+
+        // Check if db path exists
+        if(fs::exists(db_path)){
+            if(force_create){
+                fs::remove(db_path);
+            }
+            else{
+                std::cout << "Database already exists" << std::endl;
+                return 0;
+            }
         }
 
         // Check if path exists

@@ -54,7 +54,8 @@ Args::Args(int argc, const char **argv) {
             load_desc.add_options()
             ("help,h", "help message")
             ("path,p",po::value<std::string>()->required(), "path to file or directory")
-            ("db_path,d",po::value<std::string>()->default_value(""),"path to database")
+            ("db_path,d",po::value<std::string>()->default_value("temp.db"),"path to database")
+            ("force_create,f",po::bool_switch(),"delete existing database")
             ;
 
             // Make options positional
@@ -88,6 +89,7 @@ Args::Args(int argc, const char **argv) {
             // Store inputs
             this->path = args["path"].as<std::string>();
             this->db_path = args["db_path"].as<std::string>();
+            this->force_create = args["force_create"].as<bool>();
 
             // Parsing successful
             this->valid = true;
