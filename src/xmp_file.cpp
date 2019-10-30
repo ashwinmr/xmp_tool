@@ -9,8 +9,8 @@ namespace fs = boost::filesystem;
  */
 XmpFile::XmpFile(std::string file_path, bool read, bool write){
 
-    // Convert to absolute file path
-    std::string abs_file_path = fs::canonical(file_path).string();
+    // Convert to absolute path and convert forward slashes
+    std::string abs_file_path = fs::canonical(file_path).make_preferred().string();
 
     if (!SXMPMeta::Initialize()) {
         std::cout << "Could not initialize toolkit!";

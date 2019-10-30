@@ -92,11 +92,22 @@ bool Db::IsOpen(){
  */
 void Db::InsertRow(std::string path, std::string tag) {
 
-    // Convert to absolute path
-    std::string abs_path = fs::canonical(path).string();
+    // Convert to absolute path and convert forward slashes
+    std::string abs_path = fs::canonical(path).make_preferred().string();
+
+    // Escape backslashes before running sql
+    std::string abs_path_esc = "";
+    for(auto &ch: abs_path){
+        if(ch != '\\'){
+            abs_path_esc += ch;
+        }
+        else{
+            abs_path_esc += "\\\\";
+        }
+    }
 
     // Create sql statement
-    std::string sql = "insert into file_tags values(\"" + abs_path + "\",\"" + tag + "\");";
+    std::string sql = "insert into file_tags values(\"" + abs_path_esc + "\",\"" + tag + "\");";
 
     // Execute sql
     this->ExecSqlNoCallback(sql);
