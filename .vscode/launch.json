@@ -9,7 +9,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/Debug/xmp_tools.exe",
-            "args": [""],
+            "args": ["get"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
