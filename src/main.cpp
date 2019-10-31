@@ -103,8 +103,9 @@ int main(int argc, const char *argv[]) {
         std::vector<std::string> file_paths = args.file_paths;
 
         for(auto &file_path: file_paths){
-            ReadXmpFromFile(file_path);
             std::cout << std::endl;
+            std::cout << file_path << ":" << std::endl;
+            ReadXmpFromFile(file_path);
         }
     }
     else if(args.sub_cmd == "get"){
@@ -113,10 +114,11 @@ int main(int argc, const char *argv[]) {
 
         for(auto &file_path: file_paths){
             std::vector<std::string>tags = GetTagsFromFile(file_path);
+            std::cout << std::endl;
+            std::cout << file_path << ":" << std::endl;
             for(auto& tag: tags){
                 std::cout << tag << std::endl;
             }
-            std::cout << std::endl;
         }
     }
 
