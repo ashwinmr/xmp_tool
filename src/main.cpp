@@ -40,7 +40,7 @@ int main(int argc, const char *argv[]) {
                 fs::remove(db_path);
             }
             else{
-                std::cout << "Database already exists" << std::endl;
+                std::cout << "Database " << db_path << " already exists. Use -f to replace." << std::endl;
                 return 0;
             }
         }
