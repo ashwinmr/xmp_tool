@@ -237,7 +237,7 @@ Args::Args(int argc, const char **argv) {
             po::options_description read_desc("read xmp data from files");
             read_desc.add_options()
             ("help,h", "help message")
-            ("file_paths,f",po::value<std::vector<std::string>>()->multitoken()->required(),"paths to files")
+            ("file_paths,f",po::value<std::vector<std::string>>()->multitoken(),"paths to files")
             ;
 
             // Make options positional
@@ -259,7 +259,7 @@ Args::Args(int argc, const char **argv) {
             po::store(read_parsed, args);
 
             // Handle help before checking for errors
-            if (args.count("help") || (opts.size() < 1)) {
+            if (args.count("help")) {
                 std::cout << read_desc << std::endl;
                 return;
             }
@@ -268,7 +268,17 @@ Args::Args(int argc, const char **argv) {
             po::notify(args);
 
             // Store inputs
-            this->file_paths = args["file_paths"].as<std::vector<std::string>>();
+
+            // If no file paths input, get from stdin
+            if(args.count("file_paths")){
+                this->file_paths = args["file_paths"].as<std::vector<std::string>>();
+            }
+            else{
+                std::string temp;
+                while(std::getline(std::cin,temp)){
+                    this->file_paths.push_back(temp);
+                }
+            }
 
             // Parsing successful
             this->valid = true;
