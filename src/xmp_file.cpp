@@ -9,6 +9,12 @@ namespace fs = boost::filesystem;
  */
 XmpFile::XmpFile(std::string file_path, bool read, bool write){
 
+    // Make sure path is valid file
+    if(!fs::is_regular_file(file_path)){
+        std::cout << "Invalid file path: " << file_path << std::endl;
+        return;
+    }
+
     // Convert to absolute path and convert forward slashes
     std::string abs_file_path = fs::canonical(file_path).make_preferred().string();
 
