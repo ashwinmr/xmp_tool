@@ -1,6 +1,6 @@
 #include "args.hpp"
 #include "db_tools.hpp"
-#include "xmp_tools.hpp"
+#include "xmp_tool.hpp"
 #include <boost/filesystem.hpp>
 #include <iostream>
 #include <set>

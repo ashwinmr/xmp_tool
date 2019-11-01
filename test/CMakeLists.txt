@@ -38,7 +38,7 @@ endif()
 include_directories( ../include )
 
 # Add executable
-add_executable( test_xmp_tools ./test_xmp_tools.cpp )
+add_executable( test_xmp_tool ./test_xmp_tool.cpp )
 
 # Use main source code as a library and target it along with gtest
-target_link_libraries( test_xmp_tools src gtest_main )
+target_link_libraries( test_xmp_tool src gtest_main )

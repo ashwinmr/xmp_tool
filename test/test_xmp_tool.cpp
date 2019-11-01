@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "xmp_tools.hpp"
+#include "xmp_tool.hpp"
 
 // TEST(SqrTest, HandleValues){
 //     EXPECT_EQ(sqr(2),4);
